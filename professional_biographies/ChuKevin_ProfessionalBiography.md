@@ -9,7 +9,7 @@ _Currently seeking out a 2026 Summer internship opportunity._
 - GitHub: [adnval](https://www.github.com/adnval)
 
 ## Co-op & Other Work Experiences
-**IT Support Specialist & Receptionist**, Aura Nails & Spa - **West Chester, OH**
+**IT Support Specialist & Receptionist**, Aura Nails & Spa - **West Chester, OH** | Jun 2020 - Present
 - Maintain infrastructural services such as the business website and the network of store-wide devices to ensure optimal performance, availability, and positive experiences for over 10,000+ clients
 - Integrate client feedback daily to streamline the processes for client registration, appointment booking, and checkout
 
