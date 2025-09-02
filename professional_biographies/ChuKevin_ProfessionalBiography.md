@@ -1,5 +1,5 @@
 # Kevin Chu
-3rd year Cincinnatus Scholar at the University of Cincinnati, actively pursuing a B.S. in Computer Science. 
+4th year Cincinnatus Scholar at the University of Cincinnati, actively pursuing a B.S. in Computer Science. 
 
 _Currently seeking out a 2026 Summer internship opportunity._
 
