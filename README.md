@@ -29,7 +29,7 @@ This repository contains extensive documentation outlining our team's work on Lo
 | :------------: | :--------------: | :---------------------------------------------: |
 | Kevin Chu      | Computer Science | [chukv@mail.uc.edu](mailto:chukv@mail.uc.edu)   |
 | Maggie Lyon    | Computer Science | [lyonme@mail.uc.edu](mailto:lyonme@mail.uc.edu) |
-| Kate Schmidlin | Computer Science | [shmi2kj@mail.uc.edu](mailto:shmi2kj@mail.uc.edu) |
+| Kate Schmidlin | Computer Science | [schmi2kj@mail.uc.edu](mailto:schmi2kj@mail.uc.edu) |
 
 | Advisor | Email |
 | :-----: | :---: |
