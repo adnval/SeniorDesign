@@ -1,5 +1,5 @@
-# Senior Design 
-This repository contains extensive documentation outlining our team's work on Locale as well as its source files. Use the table of contents below to navigate to specific sections of the report.
+# Senior Design Report
+This repository contains extensive documentation outlining our team's work on the Locale project as well as its source files. To navigate to specific sections of the report, use the table of contents below.
 
 ## Table of Contents
 1. [Team Names & Project Abstract](#team-names--project-abstract)
