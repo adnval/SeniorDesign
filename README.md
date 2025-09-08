@@ -2,7 +2,7 @@
 This repository contains extensive documentation outlining our team's work on Locale as well as its source files. Use the table of contents below to navigate to specific sections of the report.
 
 ## Table of Contents
-1. [Team Name & Project Abstract](#team-name--project-abstract)
+1. [Team Names & Project Abstract](#team-names--project-abstract)
 2. [Project Description](#project-description)
 3. [User Stories & Design Diagrams](#user-stories--design-diagrams)
     1. [User Stories](#user-stories)
@@ -19,54 +19,46 @@ This repository contains extensive documentation outlining our team's work on Lo
 11. [Budget](#budget)
 12. [Appendix](#appendix)
 
-## Team Name & Project Abstract
-**Kevin Chu**
-  - Email: [chukv@mail.uc.edu](mailto:chukv@mail.uc.edu)  
-  - Major: Computer Science
-    
-**Maggie Lyon**
-  - Email: [lyonme@mail.uc.edu](mailto:lyonme@mail.uc.edu)  
-  - Major: Computer Science
-
-**Kate Schmidlin**
-  - Email: [shmi2kj@mailuc.edu](mailto:shmi2kj@mailuc.edu)  
-  - Major: Computer Science
+## Team Names & Project Abstract
+- Members: Kevin Chu, Maggie Lyon, Kate Schmidlin
+- Advisor: TODO: Work in progress.
+- Abstract: TODO: Work in progress.
 
 ## Project Description
-WIP.
+TODO: Work in progress.
 
 ## User Stories & Design Diagrams
-WIP.
+TODO: Work in progress.
 
 ### User Stories
-WIP.
+TODO: Work in progress.
 
 ### Design Diagrams
-WIP.
+TODO: Work in progress.
 
 ### Diagram Conventions & Components
-WIP.
+TODO: Work in progress.
 
 ## Project Tasks & Timeline
-WIP.
+TODO: Work in progress.
 
 ### Task List
-WIP.
+TODO: Work in progress.
 
 ### Timeline
-WIP.
+TODO: Work in progress.
 
 ### Effort Matrix
-WIP.
+TODO: Work in progress.
 
 ## ABET Concerns
-WIP.
+TODO: Work in progress.
 
 ## PPT Slideshow
-WIP.
+TODO: Work in progress.
 
 ## Self-Assessment Essays
-WIP.
+TODO: Work in progress.
 
 ## Professional Biographies
 - [Kevin Chu](docs/CS5001/Assignment1_Professional_Biography/ChuKevin_ProfessionalBiography.md)
@@ -74,7 +66,7 @@ WIP.
 - [Kate Schmidlin](docs/CS5001/Assignment1_Professional_Biography/SchmidlinKate_ProfessionalBiography.md)
 
 ## Budget
-WIP.
+TODO: Work in progress.
 
 ## Appendix
-WIP.
+TODO: Work in progress.
