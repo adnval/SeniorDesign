@@ -69,7 +69,9 @@ WIP.
 WIP.
 
 ## Professional Biographies
-WIP.
+- [Kevin Chu](docs/CS5001/Assignment1_Professional_Biography/ChuKevin_ProfessionalBiography.md)
+- [Maggie Lyon](docs/CS5001/Assignment1_Professional_Biography/LyonMaggie_ProfessionalBiography.md)
+- [Kate Schmidlin](docs/CS5001/Assignment1_Professional_Biography/SchmidlinKate_ProfessionalBiography.md)
 
 ## Budget
 WIP.
