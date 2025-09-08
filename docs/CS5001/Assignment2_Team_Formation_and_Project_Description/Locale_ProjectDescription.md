@@ -2,10 +2,10 @@
 
 ## Team "Locale"
 
-| Team Member    | Major            | Email                                           |
-| :------------: | :--------------: | :---------------------------------------------: |
-| Kevin Chu      | Computer Science | [chukv@mail.uc.edu](mailto:chukv@mail.uc.edu)   |
-| Maggie Lyon    | Computer Science | [lyonme@mail.uc.edu](mailto:lyonme@mail.uc.edu) |
+| Team Member    | Major            | Email                                               |
+| :------------: | :--------------: | :-------------------------------------------------: |
+| Kevin Chu      | Computer Science | [chukv@mail.uc.edu](mailto:chukv@mail.uc.edu)       |
+| Maggie Lyon    | Computer Science | [lyonme@mail.uc.edu](mailto:lyonme@mail.uc.edu)     |
 | Kate Schmidlin | Computer Science | [schmi2kj@mail.uc.edu](mailto:schmi2kj@mail.uc.edu) |
 
 | Advisor | Email |
