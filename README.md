@@ -20,11 +20,12 @@ This repository contains extensive documentation outlining our team's work on Lo
 12. [Appendix](#appendix)
 
 ## Team Names & Project Abstract
+- Team Name: Locale
 - Members: Kevin Chu, Maggie Lyon, Kate Schmidlin
 - Advisor: TODO: Work in progress.
 - Abstract: TODO: Work in progress.
 
-## Project Description
+## Project Description [[doc]](docs/CS5001/Assignment2_Project_Description/Locale_ProjectDescription.md)
 TODO: Work in progress.
 
 ## User Stories & Design Diagrams
