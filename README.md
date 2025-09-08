@@ -3,6 +3,8 @@ This repository contains extensive documentation outlining our team's work on Lo
 
 ## Table of Contents
 1. [Team Names & Project Abstract](#team-names--project-abstract)
+    1. [Team "Locale"](#team-locale)
+    2. [Project Abstract](#project-abstract)
 2. [Project Description](#project-description-doc)
 3. [User Stories & Design Diagrams](#user-stories--design-diagrams)
     1. [User Stories](#user-stories)
@@ -20,10 +22,21 @@ This repository contains extensive documentation outlining our team's work on Lo
 12. [Appendix](#appendix)
 
 ## Team Names & Project Abstract
-- Team Name: Locale
-- Members: Kevin Chu, Maggie Lyon, Kate Schmidlin
-- Advisor: TODO: Work in progress.
-- Abstract: TODO: Work in progress.
+
+### Team "Locale"
+
+| Team Member    | Major            | Email                                           |
+| :------------: | :--------------: | :---------------------------------------------: |
+| Kevin Chu      | Computer Science | [chukv@mail.uc.edu](mailto:chukv@mail.uc.edu)   |
+| Maggie Lyon    | Computer Science | [lyonme@mail.uc.edu](mailto:lyonme@mail.uc.edu) |
+| Kate Schmidlin | Computer Science | [shmi2kj@mail.uc.edu](mailto:shmi2kj@mail.uc.edu) |
+
+| Advisor | Email |
+| :-----: | :---: |
+| TBD | TBD |
+
+### Project Abstract
+TODO: Work in progress.
 
 ## Project Description [[doc]](docs/CS5001/Assignment2_Team_Formation_and_Project_Description/Locale_ProjectDescription.md)
 Locale is a social media application designed to bring real-world interactivity to online media. By leveraging location services within Locale, users are able to "leave" media at a specific location for other local users to discover, visit, and interact with. Locale aims to promote a sense of community for its users by encouraging them to visit posted media, form new relationships with other local users, and participate in discourse. 
