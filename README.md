@@ -55,7 +55,7 @@ Locale is a social media application designed to bring real-world interactivity 
 
 5. As a user, I want to follow content creators whose location-based posts I enjoy so that I can see more of their content when I explore.
 
-### Design Diagrams
+### Design Diagrams [[doc]](docs/CS5001/Assignment04_UserStories_And_DesignDiagrams/Team Locale Design Diagrams.pdf)
 
 #### D0 Diagram
 
