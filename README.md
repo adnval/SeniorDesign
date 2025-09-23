@@ -38,17 +38,36 @@ This repository contains extensive documentation outlining our team's work on th
 ### Project Abstract
 TODO: Work in progress.
 
-## Project Description [[doc]](docs/CS5001/Assignment2_Team_Formation_and_Project_Description/Locale_ProjectDescription.md)
+## Project Description [[doc]](docs/CS5001/Assignment02_TeamFormation_and_ProjectDescription/Locale_ProjectDescription.md)
 Locale is a social media application designed to bring real-world interactivity to online media. By leveraging location services within Locale, users are able to "leave" media at a specific location for other local users to discover, visit, and interact with. Locale aims to promote a sense of community for its users by encouraging them to visit posted media, form new relationships with other local users, and participate in discourse. 
 
 ## User Stories & Design Diagrams
-TODO: Work in progress.
 
-### User Stories
-TODO: Work in progress.
+### User Stories [[doc]](docs/CS5001/Assignment04_UserStories_And_DesignDiagrams/Locale_UserStories.md)
+
+1. As a user, I want to discover media left at nearby locations so that I can explore interesting content while engaging with my local environment.
+
+2. As a user, I want to interact with posts that others have left in my area so that I can participate in local discussions and feel part of the community.
+
+3. As a content creator, I want to post photos, videos, or messages at specific real-world locations so that people visiting those spots can experience my content in context.
+
+4. As a content creator, I want to see how many users have discovered and interacted with my location-based posts so that I can understand my impact and reach.
+
+5. As a user, I want to follow content creators whose location-based posts I enjoy so that I can see more of their content when I explore.
 
 ### Design Diagrams
-TODO: Work in progress.
+
+#### D0 Diagram
+
+![D0 Diagram](docs/CS5001/Assignment04_UserStories_And_DesignDiagrams/Locale_D0Diagram.png)
+
+#### D1 Diagram
+
+![D1 Diagram](docs/CS5001/Assignment04_UserStories_And_DesignDiagrams/Locale_D1Diagram.png)
+
+#### D2 Diagram
+
+![D2 Diagram](docs/CS5001/Assignment04_UserStories_And_DesignDiagrams/Locale_D2Diagram.png)
 
 ### Diagram Conventions & Components
 TODO: Work in progress.
@@ -72,12 +91,14 @@ TODO: Work in progress.
 TODO: Work in progress.
 
 ## Self-Assessment Essays
-TODO: Work in progress.
+- [Kevin Chu](docs/CS5001/Assignment03_TeamContract_And_IndividualCapstoneAssessment/ChuKevin_IndividualCapstoneAssessment.md)
+- [Maggie Lyon](docs/CS5001/Assignment03_TeamContract_And_IndividualCapstoneAssessment/LyonMaggie_IndividualCapstoneAssessment.md)
+- [Kate Schmidlin](docs/CS5001/Assignment03_TeamContract_And_IndividualCapstoneAssessment/SchmidlinKate_IndividualCapstoneAssessment.md)
 
 ## Professional Biographies
-- [Kevin Chu](docs/CS5001/Assignment1_Professional_Biography/ChuKevin_ProfessionalBiography.md)
-- [Maggie Lyon](docs/CS5001/Assignment1_Professional_Biography/LyonMaggie_ProfessionalBiography.md)
-- [Kate Schmidlin](docs/CS5001/Assignment1_Professional_Biography/SchmidlinKate_ProfessionalBiography.md)
+- [Kevin Chu](docs/CS5001/Assignment01_ProfessionalBiography/ChuKevin_ProfessionalBiography.md)
+- [Maggie Lyon](docs/CS5001/Assignment01_ProfessionalBiography/LyonMaggie_ProfessionalBiography.md)
+- [Kate Schmidlin](docs/CS5001/Assignment01_ProfessionalBiography/SchmidlinKate_ProfessionalBiography.md)
 
 ## Budget
 TODO: Work in progress.

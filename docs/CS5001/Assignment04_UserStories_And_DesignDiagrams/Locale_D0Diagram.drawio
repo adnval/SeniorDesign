@@ -1,0 +1,57 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:142.0) Gecko/20100101 Firefox/142.0" version="28.2.4">
+  <diagram name="Page-1" id="UAXPRBSMlVz8UvEeHbpC">
+    <mxGraphModel dx="800" dy="602" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" background="light-dark(#FFFFFF,#FFFFFF)" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="o0Aq0cgtpdld315TeTkO-14" value="Send to Backend" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;fontColor=light-dark(#000000,#000000);strokeColor=light-dark(#000000,#000000);labelBackgroundColor=none;spacingTop=-20;spacing=0;" edge="1" parent="1" source="o0Aq0cgtpdld315TeTkO-6" target="o0Aq0cgtpdld315TeTkO-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="o0Aq0cgtpdld315TeTkO-6" value="&lt;div&gt;User Input&lt;/div&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=light-dark(#FFFFFF,#A7A7A7);strokeColor=light-dark(#000000,#000000);swimlaneFillColor=none;fontColor=light-dark(#000000,#060606);" vertex="1" parent="1">
+          <mxGeometry x="40" y="160" width="160" height="200" as="geometry">
+            <mxRectangle x="40" y="160" width="90" height="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="o0Aq0cgtpdld315TeTkO-7" value="&lt;div&gt;User Info&lt;/div&gt;&lt;div&gt;(user, pass)&lt;/div&gt;" style="text;strokeColor=light-dark(#000000,#000000);fillColor=light-dark(#FFFFFF,#FCFCFC);align=center;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontColor=light-dark(#000000,#060606);" vertex="1" parent="o0Aq0cgtpdld315TeTkO-6">
+          <mxGeometry y="30" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="o0Aq0cgtpdld315TeTkO-8" value="&lt;div&gt;Post Info&lt;/div&gt;&lt;div&gt;(text, images, video)&lt;/div&gt;" style="text;strokeColor=light-dark(#000000,#000000);fillColor=light-dark(#FFFFFF,#FCFCFC);align=center;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontColor=light-dark(#000000,#060606);" vertex="1" parent="o0Aq0cgtpdld315TeTkO-6">
+          <mxGeometry y="70" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="o0Aq0cgtpdld315TeTkO-9" value="&lt;div&gt;Location of Post&lt;/div&gt;&lt;div&gt;(geolocation, metadata)&lt;/div&gt;" style="text;strokeColor=light-dark(#000000,#000000);fillColor=light-dark(#FFFFFF,#FCFCFC);align=center;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontColor=light-dark(#000000,#060606);" vertex="1" parent="o0Aq0cgtpdld315TeTkO-6">
+          <mxGeometry y="120" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="o0Aq0cgtpdld315TeTkO-16" value="&lt;div&gt;Device Hardware&lt;/div&gt;&lt;div&gt;(camera, GPS)&lt;/div&gt;" style="text;strokeColor=light-dark(#000000,#000000);fillColor=light-dark(#FFFFFF,#FCFCFC);align=center;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontColor=light-dark(#000000,#060606);" vertex="1" parent="o0Aq0cgtpdld315TeTkO-6">
+          <mxGeometry y="160" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="o0Aq0cgtpdld315TeTkO-22" value="Display through UI" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;strokeColor=light-dark(#000000,#101010);spacingTop=-20;labelBackgroundColor=none;fontColor=light-dark(#000000,#000000);" edge="1" parent="1" source="o0Aq0cgtpdld315TeTkO-10" target="o0Aq0cgtpdld315TeTkO-17">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="o0Aq0cgtpdld315TeTkO-10" value="Application Core" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=light-dark(#FFFFFF,#A7A7A7);strokeColor=light-dark(#000000,#000000);swimlaneFillColor=none;fontColor=light-dark(#000000,#060606);" vertex="1" parent="1">
+          <mxGeometry x="320" y="160" width="160" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="o0Aq0cgtpdld315TeTkO-11" value="Auth verification for user creds" style="text;strokeColor=light-dark(#000000,#000000);fillColor=light-dark(#FFFFFF,#FCFCFC);align=center;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontColor=light-dark(#000000,#060606);" vertex="1" parent="o0Aq0cgtpdld315TeTkO-10">
+          <mxGeometry y="30" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="o0Aq0cgtpdld315TeTkO-12" value="Create &amp;amp; Manage posts" style="text;strokeColor=light-dark(#000000,#000000);fillColor=light-dark(#FFFFFF,#FCFCFC);align=center;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontColor=light-dark(#000000,#060606);" vertex="1" parent="o0Aq0cgtpdld315TeTkO-10">
+          <mxGeometry y="70" width="160" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="o0Aq0cgtpdld315TeTkO-15" value="Manage permissions for device" style="text;strokeColor=light-dark(#000000,#000000);fillColor=light-dark(#FFFFFF,#FCFCFC);align=center;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontColor=light-dark(#000000,#060606);" vertex="1" parent="o0Aq0cgtpdld315TeTkO-10">
+          <mxGeometry y="160" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="o0Aq0cgtpdld315TeTkO-17" value="&lt;div&gt;Output&lt;/div&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=light-dark(#FFFFFF,#A7A7A7);strokeColor=light-dark(#000000,#000000);swimlaneFillColor=none;fontColor=light-dark(#000000,#060606);" vertex="1" parent="1">
+          <mxGeometry x="600" y="160" width="160" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="o0Aq0cgtpdld315TeTkO-18" value="Map Feed of Posts" style="text;strokeColor=light-dark(#000000,#000000);fillColor=light-dark(#FFFFFF,#FCFCFC);align=center;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontColor=light-dark(#000000,#060606);" vertex="1" parent="o0Aq0cgtpdld315TeTkO-17">
+          <mxGeometry y="30" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="o0Aq0cgtpdld315TeTkO-19" value="Notifications" style="text;strokeColor=light-dark(#000000,#000000);fillColor=light-dark(#FFFFFF,#FCFCFC);align=center;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontColor=light-dark(#000000,#060606);" vertex="1" parent="o0Aq0cgtpdld315TeTkO-17">
+          <mxGeometry y="80" width="160" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="o0Aq0cgtpdld315TeTkO-20" value="Local User Discovery" style="text;strokeColor=light-dark(#000000,#000000);fillColor=light-dark(#FFFFFF,#FCFCFC);align=center;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontColor=light-dark(#000000,#060606);" vertex="1" parent="o0Aq0cgtpdld315TeTkO-17">
+          <mxGeometry y="150" width="160" height="50" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
