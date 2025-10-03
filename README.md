@@ -31,8 +31,8 @@ This repository contains extensive documentation outlining our team's work on th
 | Maggie Lyon    | Computer Science | [lyonme@mail.uc.edu](mailto:lyonme@mail.uc.edu)     |
 | Kate Schmidlin | Computer Science | [schmi2kj@mail.uc.edu](mailto:schmi2kj@mail.uc.edu) |
 
-| Advisor | Email |
-| :-----: | :---: |
+| Advisor | Email                                                 |
+| :-----: | :---------------------------------------------------: |
 | Yu Zhao | [zhao3y3@ucmail.uc.edu](mailto:zhao3y3@ucmail.uc.edu) |
 
 ### Project Abstract
