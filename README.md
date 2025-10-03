@@ -33,7 +33,7 @@ This repository contains extensive documentation outlining our team's work on th
 
 | Advisor | Email |
 | :-----: | :---: |
-| TBD | TBD |
+| Yu Zhao | [zhao3y3@ucmail.uc.edu](mailto:zhao3y3@ucmail.uc.edu) |
 
 ### Project Abstract
 TODO: Work in progress.
