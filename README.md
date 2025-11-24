@@ -36,7 +36,7 @@ This repository contains extensive documentation outlining our team's work on th
 | Yu Zhao | [zhao3y3@ucmail.uc.edu](mailto:zhao3y3@ucmail.uc.edu) |
 
 ### Project Abstract
-TODO: Work in progress.
+Locale is a street art–focused social media platform that connects artists and art enthusiasts through location-based media sharing. Users can “leave” photos, videos, or messages at real-world locations, such as murals, installations, or hidden art spots for others nearby to discover. By combining digital creativity and physical exploration, Locale encourages users to engage with their surroundings by uncovering local art and participating in meaningful community discussions. Artists can share their work in context and track engagement, while users can follow their favorite creators, transforming everyday spaces into interactive galleries that celebrate local creativity and connection.
 
 ## Project Description [[doc]](docs/CS5001/Assignment02_TeamFormation_and_ProjectDescription/Locale_ProjectDescription.md)
 Locale is a social media application designed to bring real-world interactivity to online media. By leveraging location services within Locale, users are able to "leave" media at a specific location for other local users to discover, visit, and interact with. Locale aims to promote a sense of community for its users by encouraging them to visit posted media, form new relationships with other local users, and participate in discourse. 
@@ -76,7 +76,7 @@ TODO: Work in progress.
 TODO: Work in progress.
 
 ### Task List
-TODO: Work in progress.
+(docs/CS5001/Assignment05_Task_Lists/Task_List.md)
 
 ### Timeline
 TODO: Work in progress.
@@ -101,7 +101,7 @@ TODO: Work in progress.
 - [Kate Schmidlin](docs/CS5001/Assignment01_ProfessionalBiography/SchmidlinKate_ProfessionalBiography.md)
 
 ## Budget
-TODO: Work in progress.
+No budget information to show at this point. 
 
 ## Appendix
 TODO: Work in progress.
