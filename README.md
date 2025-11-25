@@ -88,10 +88,8 @@ the front-end layer, and the backend layer. Once a user data is authenticated, i
 one of many front end components, which perform calls to the database to fetch data via 
 processes communicating with the databases API layer. 
 
-### Diagram Conventions & Components
 
-
-## Project Tasks & Timeline
+## Project Tasks & Timeline ![[doc]](docs/CS5001/Assignment05_Task_Lists/Task_List.md)
 
 ### Task List
 The following table outlines tasks required for the successful completion of locale as well as their assignee. 
@@ -119,7 +117,7 @@ The following table outlines tasks required for the successful completion of loc
 | **Total Tasks**                                                                                   | **18**   |
 
 
-### Timeline
+### Timeline ![[doc]](docs/CS5001/Assigment06_Milestones_Timeline_EffortMatrix/Milestones and Timeline.pdf)
 The following table organizes tasks developed in the task list by related milestone. For each task, an expected time frame is defined. Milestones are marked as complete at the completion of the last associated task. 
 
 | Milestone | Start      | End        | Task                                   | Assignee | Time Frame              | Notes                           |
@@ -145,7 +143,7 @@ The following table organizes tasks developed in the task list by related milest
 | 5        | 3/7/26     | 4/17/26    | Buffer / Final Debugging & QA          | All      | 3/28/26 – 4/17/26        | Final stretch                     |
 
 
-### Effort Matrix
+### Effort Matrix ![[doc]](docs/CS5001/Assigment06_Milestones_Timeline_EffortMatrix/Milestones and Timeline.pdf)
 The following matrix breaks down hours estimates for each task defined above. For each task, an administrative margin of 10% is added to account for documentation, project management, etc. A 20% reserve margin is also applied to account for unexpected circumstances.  
 
 | Task                         | Assignee | Raw Effort (hrs) | + Admin (10%) | + Margin (20%) | Total (hrs) |
@@ -172,7 +170,7 @@ The following matrix breaks down hours estimates for each task defined above. Fo
 | **TOTALS**                    | —        | **156**          | **15.6**      | **31.2**       | **202.8**   |
 
 
-## ABET Concerns
+## ABET Concerns ### Timeline ![[doc]](docs/CS5001/Assignment07_Project_Constraints_Essay/Assignment #7 Constraint Essay.pdf)
 There are certainly limitations to our project, as well as concerns we must 
 address before its completion. The first concern is an ethical one, allowing people 
 to create an AR effect using pictures they take of their surrounding era creates the 
@@ -200,8 +198,7 @@ will need to be a primary focus of our application if we want to launch more
 expansive testing/implementation of the media. We will need to research modern 
 security practices to protect people’s information effectively.
 
-## PPT Slideshow
-TODO: Link to PPT
+## PPT Slideshow ![[doc]](docs/CS5001/Assigment08_Design_Presentation/Senior Design Presentation.pptx)
 
 ## Self-Assessment Essays
 - [Kevin Chu](docs/CS5001/Assignment03_TeamContract_And_IndividualCapstoneAssessment/ChuKevin_IndividualCapstoneAssessment.md)
@@ -217,4 +214,4 @@ TODO: Link to PPT
 No budget information to show at this point. 
 
 ## Appendix
-TODO: Work in progress.
+Work in progress. No major project updates to show for now. 
