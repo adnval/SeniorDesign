@@ -61,19 +61,37 @@ Locale is a social media application designed to bring real-world interactivity 
 
 ![D0 Diagram](docs/CS5001/Assignment04_UserStories_And_DesignDiagrams/Locale_D0Diagram.png)
 
+Design Diagram D0 depicts the locale system at the highest level. The functional blocks in 
+this diagram depict the input and output of the tool, as well as the basic internal 
+functionality.
+
 #### D1 Diagram
 
 ![D1 Diagram](docs/CS5001/Assignment04_UserStories_And_DesignDiagrams/Locale_D1Diagram.png)
+
+Design Diagram D1 details some of the specific modules the Locale system will contain. 
+Building upon the input/output/application core model from D1, this diagram shows the 
+basic flow of data through the system. User and device data flow into the application core, 
+where they are processed and stored accordingly. Data is returned by the application layer 
+to the front end as visual outputs that the user may interact with. In this diagram, boxes 
+represent functional modules, and arrows depict the flow of data through the application. 
 
 #### D2 Diagram
 
 ![D2 Diagram](docs/CS5001/Assignment04_UserStories_And_DesignDiagrams/Locale_D2Diagram.png)
 
+Design diagram D2 breaks down some of the functional modules of the Locale system. In 
+this diagram, shaded boxes represent different functional areas of the application. The 
+outer most box is the application layer, with any data traveling into it representing user 
+input. Within the application layer are three major functional areas – user authentication, 
+the front-end layer, and the backend layer. Once a user data is authenticated, it flows to 
+one of many front end components, which perform calls to the database to fetch data via 
+processes communicating with the databases API layer. 
+
 ### Diagram Conventions & Components
-TODO: Work in progress.
+
 
 ## Project Tasks & Timeline
-TODO: Work in progress.
 
 ### Task List
 The following table outlines tasks required for the successful completion of locale as well as their assignee. 
@@ -155,10 +173,35 @@ The following matrix breaks down hours estimates for each task defined above. Fo
 
 
 ## ABET Concerns
-TODO: Work in progress.
+There are certainly limitations to our project, as well as concerns we must 
+address before its completion. The first concern is an ethical one, allowing people 
+to create an AR effect using pictures they take of their surrounding era creates the 
+opportunity for unintentional doxxing. We need to make sure there are security 
+measures in place to guarantee people's security and anonymity. An 
+implementation of a facial recognition software that blurs peoples faces would be 
+an ideal combatant to this problem. 
+The next concern is also ethical, which is that when pictures are involved 
+you could also have inappropriate photos be taken, we need to make sure that any 
+graphic photos are not able to be platformed on our application. Similarly to the 
+face issue, some sort of recognition software should be implemented before a 
+widespread launch. Another more short term option could be some 2-factor 
+authentication to post. Ensuring a friend approves of the image not only decreases 
+incentive to post inappropriate photos, but also gets more people to join the 
+application. 
+Culturally it is good to consider multiple language adaptations for our 
+application, in order to allow people around the world to be able to access the art 
+and interact with it in a way that is not reliant on them being familiar with English. 
+We can address this via translation options in the comments, or maybe limiting 
+comments and instead shifting focus to images/emoticons as the primary form of 
+communication.  
+As with any app, security is absolutely an issue. We want to make sure any 
+account information and location information of our users is safe. Data security 
+will need to be a primary focus of our application if we want to launch more 
+expansive testing/implementation of the media. We will need to research modern 
+security practices to protect people’s information effectively.
 
 ## PPT Slideshow
-TODO: Work in progress.
+TODO: Link to PPT
 
 ## Self-Assessment Essays
 - [Kevin Chu](docs/CS5001/Assignment03_TeamContract_And_IndividualCapstoneAssessment/ChuKevin_IndividualCapstoneAssessment.md)
