@@ -6,7 +6,9 @@ import { config } from '@/components/ui/gluestack-ui-provider/config';
 
 export default function Home() {
   const router = useRouter();
+  console.log("INDEX SCREEN RENDERED");
   return (
+    
       <ScreenWrapper>
       <View className="flex-1 justify-center items-center bg-base-100">
         <Text className="text-4xl font-bold text-primary mb-4">Home</Text>

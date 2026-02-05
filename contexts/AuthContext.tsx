@@ -6,6 +6,7 @@ interface AuthContextType {
   user: User | null;
   session: Session | null;
   setAuth: (user: User | null, session?: Session | null) => void;
+  signOutUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -21,6 +22,12 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const setAuth = (authUser: User | null, authSession: Session | null = null) => {
     setUser(authUser);
     setSession(authSession);
+  };
+
+  const signOutUser = async () => {
+    await supabase.auth.signOut();
+    setUser(null);
+    setSession(null);
   };
 
   // Subscribe to Supabase auth changes
@@ -42,8 +49,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     };
   }, []);
 
+
   return (
-    <AuthContext.Provider value={{ user, session, setAuth }}>
+    <AuthContext.Provider value={{ user, session, setAuth, signOutUser }}>
       {children}
     </AuthContext.Provider>
   );
