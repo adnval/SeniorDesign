@@ -33,7 +33,7 @@ export const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   button: {
-    backgroundColor: theme.colors.primary,
+    backgroundColor: theme.colors.secondary,
     paddingVertical: hp(1.5),
     paddingHorizontal: wp(5),
     borderRadius: 8,
