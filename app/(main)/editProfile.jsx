@@ -147,6 +147,24 @@ useEffect(() => {
             </View>
           </Card>
 
+          <Card style={styles.sectionCard}>
+            <FormControl key={"bio"} className="w-full">
+                <FormControlLabel>
+                  <FormControlLabelText>{"Bio"}</FormControlLabelText>
+                </FormControlLabel>
+                <Input>
+                  <InputField
+                    placeholder={`Enter your bio`}
+                    value={userDetails["bio"]}
+                    onChangeText={(value) =>
+                      setUserDetails((prev) => ({ ...prev, bio: value }))
+                    }
+                    multiline={true}
+                  />
+                </Input>
+              </FormControl>
+          </Card>
+
           {/* Account Info Inputs */}
           <Card style={styles.sectionCard}>
             {[
@@ -154,7 +172,6 @@ useEffect(() => {
               { label: "Username", key: "username", icon: "user" },
               { label: "Phone Number", key: "phoneNumber", icon: "call", keyboardType: "phone-pad" },
               { label: "Address", key: "address", icon: "location" },
-              { label: "Bio", key: "bio", icon: "user", multiline: true },
             ].map((field) => (
               <FormControl key={field.key} className="w-full mt-4">
                 <FormControlLabel>

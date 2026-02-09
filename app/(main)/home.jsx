@@ -87,6 +87,18 @@ const Profile = () => {
           )}
         </Card>
 
+        <Card style={styles.sectionCard}>
+          <Text size="lg" bold style={styles.sectionTitle}>
+            Bio
+          </Text>
+          <View style={styles.infoRow}>
+            <Icon name="user" strokeWidth={2} size={20} color={theme.colors.onSecondary} />
+            <Text style={styles.detail}>
+              {profile.bio ?? "N/A"}
+            </Text>
+          </View>
+          </Card>
+
         {/* Contact & Info Section */}
         <Card style={styles.sectionCard}>
           <Text size="lg" bold style={styles.sectionTitle}>
@@ -115,13 +127,6 @@ const Profile = () => {
           </View>
 
           <View style={styles.infoRow}>
-            <Icon name="user" strokeWidth={2} size={20} color={theme.colors.onSecondary} />
-            <Text style={styles.detail}>
-              Bio: {profile.bio ?? "N/A"}
-            </Text>
-          </View>
-
-          <View style={styles.infoRow}>
             <Icon name="lock" strokeWidth={2} size={20} color={theme.colors.onSecondary} />
             <Text style={styles.detail}>
               Account created:{" "}
@@ -138,6 +143,9 @@ const Profile = () => {
           <Text size="lg" bold style={styles.sectionTitle}>
             Actions
           </Text>
+          <Button onPress={() => router.push('/editProfile')} style={styles.logoutButton}>
+            <ButtonText>Edit Profile</ButtonText>
+          </Button>
           <Button onPress={handleSignOut} style={styles.logoutButton}>
             <ButtonText>Log out</ButtonText>
           </Button>
