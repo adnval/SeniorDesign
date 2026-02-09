@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, ReactNode, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import { Session, User } from "@supabase/supabase-js";
-import { getUserData } from "@/services/userService";
+import { getUserData, updateUser } from "@/services/userService";
 
 interface AuthContextType {
   user: User | null;
@@ -9,6 +9,7 @@ interface AuthContextType {
   userData: any | null;
   setAuth: (user: User | null, session?: Session | null) => void;
   signOutUser: () => Promise<void>;
+  updateUserData: (newData: any) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -80,9 +81,28 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     };
   }, []);
 
+  //update user data in context after profile update
+  const updateUserData = async (newData: any) => {
+  console.log("Updating user data with:", newData);
+  if (user) {
+    const result = await updateUser(user.id, newData);
+    if (result.success) {
+      // Update the nested data property, not the root
+      setUserData((prev: any) => ({
+        ...prev,
+        data: {
+          ...prev?.data,
+          ...newData
+        }
+      }));
+      console.log("User data updated successfully:", result.data);
+    }
+  }
+}
+
   return (
     <AuthContext.Provider
-      value={{ user, session, userData, setAuth, signOutUser }}
+      value={{ user, session, userData, setAuth, signOutUser, updateUserData }}
     >
       {children}
     </AuthContext.Provider>

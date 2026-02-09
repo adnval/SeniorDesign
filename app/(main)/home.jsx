@@ -16,10 +16,11 @@ import Icon from 'assets/icons'
 const Profile = () => {
   const { user, userData, signOutUser, setAuth } = useAuth();
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   // Wait for userData to be fetched
   useEffect(() => {
+    console.log("userData changed:", userData);
     if (userData) setLoading(false);
   }, [userData]);
 
@@ -56,7 +57,9 @@ const Profile = () => {
     );
   }
 
-  const profile = userData?.data ?? {};
+  // Move profile definition here so it updates with userData changes
+  const profile = userData?.data ?? userData ?? {};
+  console.log("Rendering profile for user:", profile);
 
   return (
     <ScreenWrapper bg="white">
@@ -79,7 +82,7 @@ const Profile = () => {
           <Text size="xl" bold style={styles.name}>
             {profile.name || "Your Name"}
           </Text>
-          {profile.email && (
+          {profile.username && (
             <Text style={styles.username}>{profile.username}</Text>
           )}
         </Card>
