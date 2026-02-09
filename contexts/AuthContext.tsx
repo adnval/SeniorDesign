@@ -28,7 +28,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   const signOutUser = async () => {
+    console.log("calling Sign out user...");
     await supabase.auth.signOut();
+    console.log("Sign out complete, clearing auth state...");
     setUser(null);
     setSession(null);
     setUserData(null);

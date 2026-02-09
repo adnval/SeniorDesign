@@ -1,8 +1,6 @@
 import React from "react";
-import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 
-import { Box } from "@/components/ui/box";
 import { VStack } from "@/components/ui/vstack";
 import { HStack } from "@/components/ui/hstack";
 import { Text } from "@/components/ui/text";
@@ -13,15 +11,8 @@ import {
   InputSlot,
   InputIcon,
 } from "@/components/ui/input";
-import { Button, ButtonText } from "@/components/ui/button";
 import { Center } from "@/components/ui/center";
-import {
-  Checkbox,
-  CheckboxIndicator,
-  CheckboxIcon,
-  CheckboxLabel,
-} from "@/components/ui/checkbox";
-import { EyeIcon, EyeOffIcon, CheckIcon } from "@/components/ui/icon";
+import { EyeIcon, EyeOffIcon} from "@/components/ui/icon";
 
 import ScreenWrapper from "components/ScreenWrapper";
 import BackButton from "components/BackButton";
@@ -42,8 +33,6 @@ import { Pressable, View, Alert } from "react-native";
 import { styles } from "@/constants/theme";
 
 import { supabase } from "@/lib/supabase";
-
-
 
 
 const Login = () => {
@@ -74,8 +63,15 @@ const Login = () => {
   };
 
   return (
+      <ScreenWrapper bg="white">
+      <View className="w-full items-center px-6">
+        <View className="w-full max-w-[336px]">
+          <BackButton router={router} route={"/welcome"} />
+        </View>
+      </View>
+
       <Center className="flex-1 p-6">
-        <VStack className="rounded-xl border border-outline-200 bg-background-0 p-6 w-full max-w-[336px]">
+        <VStack className="rounded-xl bg-background-0 p-3 w-full max-w-[336px]">
           <Heading>Welcome Back!</Heading>
           <Text className="mt-2">Login to start using Locale</Text>
           <FormControl className="w-full mt-4">
@@ -127,24 +123,10 @@ const Login = () => {
               </FormControlErrorText>
             </FormControlError>
           </FormControl>
-
-          <HStack className="justify-between my-5">
-            <Checkbox value={''} size="sm">
-              <CheckboxIndicator>
-                <CheckboxIcon as={CheckIcon} />
-              </CheckboxIndicator>
-              <CheckboxLabel>Remember me</CheckboxLabel>
-            </Checkbox>
-
-            <Button variant="link" size="sm">
-              <ButtonText className="underline underline-offset-1">
-                Forgot Password?
-              </ButtonText>
-            </Button>
-          </HStack>
-          <Button className="w-full" size="sm" onPress={handleLogin}>
-            <ButtonText>Log in</ButtonText>
-          </Button>
+          <HStack className="justify-between my-5"/>
+          <Pressable className="w-full" onPress={handleLogin} style={styles.button}>
+            <Text style={styles.buttonText}>Log in</Text>
+          </Pressable>
         </VStack>
         <View style={styles.bottomTextContainer}>
             <Text style={styles.secondaryText}>Don't have an account?</Text>
@@ -153,6 +135,7 @@ const Login = () => {
             </Pressable>
         </View>
       </Center>
+      </ScreenWrapper>
   );
 };
 

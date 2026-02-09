@@ -13,10 +13,10 @@ const welcome = () => {
     <ScreenWrapper bg="white">
       <StatusBar style="dark" />
       <View style={styles.centeredContainer}>
-            <Image style={styles.welcomeImage} resizeMode="contain" source={require('../assets/images/welcome.png')} />
-            <View className="gap-4">
-                <Text className="font-bold text-center">Locale</Text>
-                <Text className="text-center">subtitle text</Text>
+        <View style={styles.middleContent}>
+            <View>  
+              <Image style={styles.welcomeImage} resizeMode="contain" source={require('../assets/images/locale.png')} />
+              <Text style={styles.subtitle}>Discover art where art lives.</Text>
             </View>
             <View style={styles.footer}>
                 <Button buttonStyle={styles.button} textStyle={styles.buttonText} title="Get Started" 
@@ -28,6 +28,7 @@ const welcome = () => {
                     </Pressable>
                 </View>
             </View>
+        </View>
       </View>
     </ScreenWrapper>
   )

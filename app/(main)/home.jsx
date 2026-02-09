@@ -1,16 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, ScrollView, Image } from "react-native";
+import { StyleSheet, View, ScrollView, Image, Pressable } from "react-native";
 import { useAuth } from "@/contexts/AuthContext";
 import { Text } from "@/components/ui/text";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useRouter } from "expo-router";
 import HomeBar from "@/components/HomeBar";
+import LogoHeader from "@/components/LogoHeader";
+import ScreenWrapper from "@/components/ScreenWrapper";
+import Avatar from "@/components/Avatar";
+import { Alert } from "react-native";
+import {theme} from "@/constants/theme";
+import Icon from 'assets/icons'
 
 const Profile = () => {
-  const { user, userData, signOutUser } = useAuth();
+  const { user, userData, signOutUser, setAuth } = useAuth();
   const router = useRouter();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   // Wait for userData to be fetched
   useEffect(() => {
@@ -18,8 +24,28 @@ const Profile = () => {
   }, [userData]);
 
   const handleSignOut = async () => {
-    await signOutUser();
-    router.replace("/welcome");
+    console.log("Signing out user...");
+    Alert.alert('Confirm Sign Out', 'Are you sure you want to sign out?', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Sign out cancelled'),
+        style:'cancel',
+      },
+      {
+        text: 'Sign Out',
+        onPress: async () => {
+          try {
+            await signOutUser();
+            console.log("User signed out successfully");
+            router.replace("/welcome");
+          } catch (error) {
+            console.error("Error signing out:", error);
+            Alert.alert('Error', 'An error occurred while signing out. Please try again.');
+          }
+        },
+        style:'destructive',
+      },
+    ]);
   };
 
   if (!user || loading) {
@@ -33,40 +59,76 @@ const Profile = () => {
   const profile = userData?.data ?? {};
 
   return (
+    <ScreenWrapper bg="white">
+      <LogoHeader title="Profile"/>
     <View style={styles.container}>
+      {/* <LogoHeader /> */}
       <ScrollView contentContainerStyle={styles.scrollContent}>
         {/* Profile Header */}
         <Card style={styles.profileHeader}>
           <View style={styles.avatarContainer}>
-            <Image
-              source={{
-                uri: profile.image || "https://via.placeholder.com/100",
-              }}
-              style={styles.avatar}
+            <Avatar
+              uri={profile?.image ?? undefined}
+              size={100}
+              rounded={50}
             />
+            <Pressable style={styles.editIcon} onPress={()=> router.push('/editProfile')}>
+              <Icon name="edit" strokeWidth={2} size={20} color={theme.colors.onSecondary}/>
+            </Pressable>
           </View>
           <Text size="xl" bold style={styles.name}>
             {profile.name || "Your Name"}
           </Text>
           {profile.email && (
-            <Text style={styles.username}>{profile.email}</Text>
+            <Text style={styles.username}>{profile.username}</Text>
           )}
         </Card>
 
         {/* Contact & Info Section */}
         <Card style={styles.sectionCard}>
           <Text size="lg" bold style={styles.sectionTitle}>
-            Contact & Info
+            Account Info
           </Text>
-          <Text style={styles.detail}>
-            Phone: {profile.phoneNumber ?? "N/A"}
-          </Text>
-          <Text style={styles.detail}>Address: {profile.address ?? "N/A"}</Text>
-          <Text style={styles.detail}>Bio: {profile.bio ?? "N/A"}</Text>
-          <Text style={styles.detail}>
-            Account created: {new Date(profile.created_at).toLocaleDateString()}
-          </Text>
+
+          <View style={styles.infoRow}>
+            <Icon name="call" strokeWidth={2} size={20} color={theme.colors.onSecondary} />
+            <Text style={styles.detail}>
+              Phone: {profile.phoneNumber ?? "N/A"}
+            </Text>
+          </View>
+
+          <View style={styles.infoRow}>
+            <Icon name="location" strokeWidth={2} size={20} color={theme.colors.onSecondary} />
+            <Text style={styles.detail}>
+              Address: {profile.address ?? "N/A"}
+            </Text>
+          </View>
+
+          <View style={styles.infoRow}>
+            <Icon name="mail" strokeWidth={2} size={20} color={theme.colors.onSecondary} />
+            <Text style={styles.detail}>
+              Email: {profile.email ?? "N/A"}
+            </Text>
+          </View>
+
+          <View style={styles.infoRow}>
+            <Icon name="user" strokeWidth={2} size={20} color={theme.colors.onSecondary} />
+            <Text style={styles.detail}>
+              Bio: {profile.bio ?? "N/A"}
+            </Text>
+          </View>
+
+          <View style={styles.infoRow}>
+            <Icon name="lock" strokeWidth={2} size={20} color={theme.colors.onSecondary} />
+            <Text style={styles.detail}>
+              Account created:{" "}
+              {profile.created_at
+                ? new Date(profile.created_at).toLocaleDateString()
+                : "N/A"}
+            </Text>
+          </View>
         </Card>
+
 
         {/* Actions Section */}
         <Card style={styles.sectionCard}>
@@ -82,6 +144,7 @@ const Profile = () => {
       {/* Home Bar fixed at bottom */}
       <HomeBar active="profile" />
     </View>
+    </ScreenWrapper>
   );
 };
 
@@ -135,5 +198,26 @@ const styles = StyleSheet.create({
   },
   logoutButton: {
     marginTop: 8,
+    backgroundColor: theme.colors.onSecondary,
   },
+  editIcon: {
+    position: "absolute",
+    bottom: 0,
+    right: -9,
+    padding: 7,
+    borderRadius: 50,
+    backgroundColor: theme.colors.onPrimary,
+    shadowColor: theme.colors.onSecondary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.4,
+    shadowRadius: 5,
+    elevation: 7,
+  },
+  infoRow: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  gap: 10,
+  marginVertical: 6,
+  },
+
 });

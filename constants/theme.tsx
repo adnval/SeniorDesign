@@ -4,19 +4,28 @@ import { StyleSheet} from 'react-native'
 
 export const theme = {
     colors: {
-        primary: "#d141e3",
+        primary: "#8331d1",
         onPrimary: "#fdfcff",
-        secondary: "#1e103c",
-        onSecondary: "#f5e4fe",
-        accent: "#e8f0f7",
-        onAccent: "#1f0acd",
-        success: "#a6e075",
-        error: "#d16a28",
-        warning: "#e5d976",
-        info: "#b0d9f3",
-        neutral: "#434343",
-        onNeutral: "#f7f7f7",
+        secondary: "#dbc3eb",
+        onSecondary: "#43286d",
+        accent: "#57e1d7",
+        onAccent: "#0000fb",
+        tertiary: "#fad008",
+        onTertiary: "#ba2d7b",
+        surface: "#f5effd",
+        warning: "#ff0000",
     },
+    radius: {
+        sm: 4,
+        md: 8,
+        lg: 12,
+    },
+    fonts: {
+        bold: "700",
+        semibold: "600",
+        medium: "500",
+        regular: "400",
+    }
 };
 
 export const styles = StyleSheet.create({
@@ -33,7 +42,7 @@ export const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   button: {
-    backgroundColor: theme.colors.secondary,
+    backgroundColor: theme.colors.primary,
     paddingVertical: hp(1.5),
     paddingHorizontal: wp(5),
     borderRadius: 8,
@@ -66,7 +75,7 @@ export const styles = StyleSheet.create({
 
     },
 secondaryText: {
-    color: theme.colors.secondary,
+    color: theme.colors.onSecondary,
     fontSize: 14,
     textAlign: 'center',
     },
@@ -78,7 +87,21 @@ secondaryText: {
     },
     container: {
       flex: 1,
-      paddingHorizontal: wp(5),
+      paddingHorizontal: wp(10),
       backgroundColor: 'white',
+    },
+    subtitle:{
+      textAlign: 'center',
+      paddingHorizontal: wp(10),
+      fontSize: hp(2),
+      color: theme.colors.onSecondary,
+    },
+    middleContent: {
+      flex: 1,
+      marginTop: hp(10),
+      marginBottom: hp(20),
+      justifyContent: 'space-around',
+      alignItems: 'center',
+      width: '100%',
     },
 });

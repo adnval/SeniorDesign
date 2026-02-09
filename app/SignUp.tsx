@@ -36,6 +36,8 @@ import { AlertCircleIcon } from "@/components/ui/icon";
 import { Alert, Pressable, View } from "react-native";
 import { styles } from "@/constants/theme";
 import { supabase } from "@/lib/supabase";
+import ScreenWrapper from "@/components/ScreenWrapper";
+import BackButton from "@/components/BackButton";
 
 const SignUp = () => {
   const router = useRouter();
@@ -59,6 +61,7 @@ const SignUp = () => {
     let name = nameInput.trim();
     let email = emailInput.trim();
     let password = passwordInput.trim();
+    let username = email.split('@')[0];
 
     setIsInvalid(false);
 
@@ -67,7 +70,8 @@ const SignUp = () => {
       password: password,
       options: {
         data: {
-            name
+            name,
+            username
       }
     }}); 
 
@@ -84,8 +88,14 @@ const SignUp = () => {
   };
 
   return (
+    <ScreenWrapper bg="white">
+    <View className="w-full items-center px-6">
+      <View className="w-full max-w-[336px]">
+        <BackButton router={router} route={"/welcome"} />
+      </View>
+    </View>
     <Center className="flex-1 p-6">
-      <VStack className="rounded-xl border border-outline-200 bg-background-0 p-6 w-full max-w-[336px]">
+      <VStack className="rounded-xl bg-background-0 p-3 w-full max-w-[336px]">
         <Heading>Create an account</Heading>
         <Text className="mt-2">Sign up to start using Locale</Text>
 
@@ -151,10 +161,12 @@ const SignUp = () => {
             </FormControlErrorText>
           </FormControlError>
         </FormControl>
+        <HStack className="justify-between my-5"/>
 
-        <Button className="w-full mt-6" size="sm" onPress={handleSignUp}>
-          <ButtonText>Sign up</ButtonText>
-        </Button>
+
+        <Pressable className="w-full" onPress={handleSignUp} style={styles.button}>
+          <Text style={styles.buttonText}>Sign up</Text>
+        </Pressable>
       </VStack>
       <View style={styles.bottomTextContainer}>
             <Text style={styles.secondaryText}>Already have an account?</Text>
@@ -163,6 +175,7 @@ const SignUp = () => {
             </Pressable>
         </View>
     </Center>
+    </ScreenWrapper>
     
   );
 };
