@@ -16,7 +16,7 @@ import Icon from 'assets/icons'
 const Profile = () => {
   const { user, userData, signOutUser, setAuth } = useAuth();
   const router = useRouter();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   // Wait for userData to be fetched
   useEffect(() => {
