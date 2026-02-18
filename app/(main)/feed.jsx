@@ -4,6 +4,7 @@ import HomeBar from '@/components/HomeBar'
 import { styles } from 'constants/theme'
 import ScreenWrapper from '@/components/ScreenWrapper'
 import LogoHeader from '@/components/LogoHeader'
+import CreatePost from '@/components/CreatePost'
 
 const feed = () => {
   return (
@@ -11,6 +12,7 @@ const feed = () => {
       <LogoHeader title="Feed"/>
     <View style={styles.container}>
       <Text>feed</Text>
+      <CreatePost></CreatePost>
       <HomeBar active="feed" />
     </View>
     </ScreenWrapper>
