@@ -8,7 +8,7 @@ const RichTextEditor = ({
     onChange
 }) => {
   return (
-    <View style={{minHeight: 285}}>
+    <View style={{minHeight: 150}}>
         <RichToolbar
             actions={[
                 actions.setBold,
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
         backgroundColor: theme.colors.secondary,
     },
     rich: {
-        minHeight: 240,
+        minHeight: 110,
         flex: 1,
         borderWidth: 1.5,
         borderTopWidth: 0,

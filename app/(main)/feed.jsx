@@ -4,8 +4,7 @@ import HomeBar from '@/components/HomeBar'
 import { styles } from 'constants/theme'
 import ScreenWrapper from '@/components/ScreenWrapper'
 import LogoHeader from '@/components/LogoHeader'
-import CreatePost from '@/components/CreatePost'
-
+import CreatePost from '@/app/(main)/CreatePost'
 
 const feed = () => {
   return (
