@@ -25,7 +25,7 @@ export const theme = {
         semibold: "600",
         medium: "500",
         regular: "400",
-    }
+    },
 };
 
 export const styles = StyleSheet.create({

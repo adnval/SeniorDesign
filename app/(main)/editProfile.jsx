@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { StyleSheet, View, ScrollView, Image, Pressable } from "react-native";
 import { useAuth } from "@/contexts/AuthContext";
 import { Text } from "@/components/ui/text";
@@ -13,6 +13,7 @@ import { Alert } from "react-native";
 import {theme} from "@/constants/theme";
 import Icon from 'assets/icons'
 import * as ImagePicker from 'expo-image-picker';
+import { uploadFile } from "@/services/imageService";
 
 import {
   Input,
@@ -36,9 +37,10 @@ import { getUserImageSrc } from "@/services/imageService";
 const EditProfile = () => {
   const { user, userData, updateUserData } = useAuth();
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
 
-  // Single state object for all editable fields
+  // Derive initial values directly from userData — single source of truth
   const [userDetails, setUserDetails] = useState({
     name: "",
     username: "",
@@ -48,83 +50,76 @@ const EditProfile = () => {
     image: "",
   });
 
-  // Populate the form with current user data
-  // Populate the form with current user data
-useEffect(() => {
-  if (userData?.data) {
-    setUserDetails({
-      name: userData.data.name ?? "",
-      username: userData.data.username ?? "",
-      phoneNumber: userData.data.phoneNumber ?? "",
-      address: userData.data.address ?? "",
-      bio: userData.data.bio ?? "",
-      image: userData.data.image ?? "",
+  // Only populate once when userData first loads — use a ref to prevent re-population
+  const initialized = useRef(false);
+  useEffect(() => {
+    if (userData?.data && !initialized.current) {
+      initialized.current = true;
+      setUserDetails({
+        name: userData.data.name ?? "",
+        username: userData.data.username ?? "",
+        phoneNumber: userData.data.phoneNumber ?? "",
+        address: userData.data.address ?? "",
+        bio: userData.data.bio ?? "",
+        image: getUserImageSrc(userData.data.image) ?? "",
+      });
+    }
+  }, [userData]);
+
+  const handleChange = (key, value) => {
+    setUserDetails((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const onPickImage = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== "granted") {
+      Alert.alert("Permission Denied", "We need access to your photos to pick an image.");
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ["images"],
+      allowsEditing: true,
+      aspect: [4, 4],
+      quality: 0.7,
     });
-    setLoading(false);
-  }
-}, [userData]);
+
+    if (result.canceled) return;
+
+    const pickedAsset = result.assets[0];
+
+    // Show local image immediately for instant feedback
+    setUploadingImage(true);
+    handleChange("image", pickedAsset.uri);
+
+    const imageRes = await uploadFile("profiles", pickedAsset.uri, true);
+
+    if (imageRes.success) {
+      // Swap local URI for the permanent Supabase path
+      handleChange("image", imageRes.data);
+    } else {
+      // Revert to whatever was saved before
+      handleChange("image", userData?.data?.image ?? "");
+      Alert.alert("Upload Failed", imageRes.msg);
+    }
+    setUploadingImage(false);
+  };
 
   const saveChanges = async () => {
+    setSaving(true);
     try {
-      let updatedDetails = { ...userDetails };
-      
-      // If image is an object (newly picked), you may need to upload it first
-      // Uncomment and implement this if you have an upload function
-      // if (userDetails.image && typeof userDetails.image === 'object') {
-      //   const imageUrl = await uploadImage(userDetails.image);
-      //   updatedDetails.image = imageUrl;
-      // }
-      
-      await updateUserData(updatedDetails);
+      await updateUserData(userDetails);
       Alert.alert("Success", "Profile updated successfully!");
-      router.back(); // Navigate back to Profile
+      router.back();
     } catch (error) {
       console.error("Error updating profile:", error);
       Alert.alert("Error", "Failed to update profile. Please try again.");
+    } finally {
+      setSaving(false);
     }
   };
 
-  const cancelChanges = () => router.back();
-
-  const onPickImage = async () => {
-    console.log("Requesting media library permissions...");
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== 'granted') {
-        Alert.alert('Permission Denied', 'We need access to your photos to pick an image.');
-        return;
-    }
-
-    console.log("Launching image library...");
-
-    let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ['images'],
-        allowsEditing: true,
-        aspect: [4, 4],
-        quality: 0.7,
-    });
-
-    if (!result.canceled) {
-        // Store the asset object temporarily for display
-        setUserDetails((prev) => ({ ...prev, image: result.assets[0]}));
-    }
-  };
-
-  // Determine the correct image source
-  let imageSource;
-  if (userDetails.image) {
-    if (typeof userDetails.image === 'object' && userDetails.image.uri) {
-      // Newly picked image
-      imageSource = { uri: userDetails.image.uri };
-    } else if (typeof userDetails.image === 'string') {
-      // Existing image URL
-      imageSource = getUserImageSrc(userDetails.image);
-    } else {
-      // Fallback
-      imageSource = getUserImageSrc(userDetails.image);
-    }
-  }
-
-  if (!user || loading) {
+  if (!user || !userData?.data) {
     return (
       <View style={styles.loadingContainer}>
         <Text size="lg">Loading profile...</Text>
@@ -137,35 +132,40 @@ useEffect(() => {
       <LogoHeader title="Edit Profile" />
       <View style={styles.container}>
         <ScrollView contentContainerStyle={styles.scrollContent}>
+
           {/* Profile Picture */}
           <Card style={styles.profileHeader}>
             <View style={styles.avatarContainer}>
-              <Image source={imageSource} style={styles.avatar} />
-              <Pressable style={styles.editIcon} onPress={onPickImage}>
-                <Icon name="camera" strokeWidth={2} size={20} color={theme.colors.onSecondary} />
+              <Image source={getUserImageSrc(userDetails.image)} style={styles.avatar} />
+              <Pressable style={styles.editIcon} onPress={onPickImage} disabled={uploadingImage}>
+                <Icon
+                  name="camera"
+                  strokeWidth={2}
+                  size={20}
+                  color={theme.colors.onSecondary}
+                />
               </Pressable>
             </View>
           </Card>
 
+          {/* Bio */}
           <Card style={styles.sectionCard}>
-            <FormControl key={"bio"} className="w-full">
-                <FormControlLabel>
-                  <FormControlLabelText>{"Bio"}</FormControlLabelText>
-                </FormControlLabel>
-                <Input>
-                  <InputField
-                    placeholder={`Enter your bio`}
-                    value={userDetails["bio"]}
-                    onChangeText={(value) =>
-                      setUserDetails((prev) => ({ ...prev, bio: value }))
-                    }
-                    multiline={true}
-                  />
-                </Input>
-              </FormControl>
+            <FormControl className="w-full">
+              <FormControlLabel>
+                <FormControlLabelText>Bio</FormControlLabelText>
+              </FormControlLabel>
+              <Input>
+                <InputField
+                  placeholder="Enter your bio"
+                  value={userDetails.bio}
+                  onChangeText={(value) => handleChange("bio", value)}
+                  multiline
+                />
+              </Input>
+            </FormControl>
           </Card>
 
-          {/* Account Info Inputs */}
+          {/* Account Info */}
           <Card style={styles.sectionCard}>
             {[
               { label: "Name", key: "name", icon: "user" },
@@ -180,40 +180,31 @@ useEffect(() => {
                 <Input>
                   <InputSlot>
                     <InputIcon>
-                      <Icon
-                        name={field.icon}
-                        strokeWidth={2}
-                        size={20}
-                        color={theme.colors.onSecondary}
-                      />
+                      <Icon name={field.icon} strokeWidth={2} size={20} color={theme.colors.onSecondary} />
                     </InputIcon>
                   </InputSlot>
                   <InputField
                     placeholder={`Enter your ${field.label.toLowerCase()}`}
                     value={userDetails[field.key]}
-                    onChangeText={(value) =>
-                      setUserDetails((prev) => ({ ...prev, [field.key]: value }))
-                    }
+                    onChangeText={(value) => handleChange(field.key, value)}
                     keyboardType={field.keyboardType ?? "default"}
-                    multiline={field.multiline ?? false}
                   />
                 </Input>
               </FormControl>
             ))}
           </Card>
 
-          {/* Actions Section */}
+          {/* Actions */}
           <Card style={styles.sectionCard}>
-            <Button onPress={saveChanges} style={styles.logoutButton}>
-              <ButtonText>Save Changes</ButtonText>
+            <Button onPress={saveChanges} style={styles.logoutButton} disabled={saving || uploadingImage}>
+              <ButtonText>{saving ? "Saving..." : "Save Changes"}</ButtonText>
             </Button>
-            <Button onPress={cancelChanges} style={styles.cancelButton}>
+            <Button onPress={() => router.back()} style={styles.cancelButton} disabled={saving}>
               <ButtonText>Cancel</ButtonText>
             </Button>
           </Card>
-        </ScrollView>
 
-        {/* Home Bar fixed at bottom */}
+        </ScrollView>
         <HomeBar active="profile" />
       </View>
     </ScreenWrapper>

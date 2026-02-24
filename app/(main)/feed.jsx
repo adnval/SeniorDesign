@@ -6,6 +6,7 @@ import ScreenWrapper from '@/components/ScreenWrapper'
 import LogoHeader from '@/components/LogoHeader'
 import CreatePost from '@/components/CreatePost'
 
+
 const feed = () => {
   return (
     <ScreenWrapper bg="white">
