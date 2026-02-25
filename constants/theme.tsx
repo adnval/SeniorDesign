@@ -14,11 +14,14 @@ export const theme = {
         onTertiary: "#ba2d7b",
         surface: "#f5effd",
         warning: "#ff0000",
+        gray: "#9788a2",
+
     },
     radius: {
         sm: 4,
         md: 8,
         lg: 12,
+        xl: 24,
     },
     fonts: {
         bold: "700",

@@ -59,15 +59,15 @@ const CreatePost = () => {
         }
 
         let data = {
-            image: file,
+            file: file, // CHANGED: was "image: file", needs to be "file" so createOrUpdatePost can detect and upload it
             caption: bodyRef.current,
             userId: user?.id,
         }
 
         // create post
-        let response =  await createOrUpdatePost(data);
+        let response = await createOrUpdatePost(data);
         console.log('Create post response: ', response);
-        if(response.success){
+        if (response.success) {
             alert('Post created successfully!');
             router.replace('/home');
         } else {
