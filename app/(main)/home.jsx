@@ -85,6 +85,10 @@ const Profile = () => {
           {profile.username && (
             <Text style={styles.username}>{profile.username}</Text>
           )}
+          <Pressable style={styles.infoRow} onPress={() => router.push('/MyPosts')}>
+                <Icon name="image" strokeWidth={2} size={20} color={theme.colors.onSecondary} />
+                <Text size="lg" bold style={{color: theme.colors.onSecondary}}>My Posts</Text>
+            </Pressable>
         </Card>
 
         <Card style={styles.sectionCard}>
@@ -98,6 +102,7 @@ const Profile = () => {
             </Text>
           </View>
           </Card>
+        
 
         {/* Contact & Info Section */}
         <Card style={styles.sectionCard}>

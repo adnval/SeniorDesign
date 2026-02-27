@@ -192,3 +192,22 @@ export const parseWKBPoint = (wkb) => {
 export const getPostCoords = (post) => {
     return parseWKBPoint(post.location)
 }
+
+export const deletePost = async (postId)=>{
+    try{
+        const {error} = await supabase
+        .from('posts')
+        .delete()
+        .eq('id', postId)
+
+        if(error){
+            console.log('Supabase error removing post: ', error);
+            return {success: false, msg: "Error removing post"};
+        }
+        return {success: true};
+
+    } catch(error){
+        console.log('Error removing post: ', error);
+        return {success: false, msg: "Error removing post"};
+    }
+}

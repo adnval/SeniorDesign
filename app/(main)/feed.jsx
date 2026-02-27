@@ -12,7 +12,7 @@ import { FlatList } from 'react-native'
 import { wp, hp } from '@/helpers/common';
 import PostCard from '@/components/PostCard'
 import { supabase } from '../../lib/supabase'
-import getUserData from '@/services/userService'
+import {getUserData} from '@/services/userService'
 
 var limit = 0;
 const feed = () => {
@@ -24,28 +24,40 @@ const feed = () => {
 
   const handlePostEvent = async (payload) => {
     console.log('Change received!', payload);
-    if (payload.eventType === 'INSERT' && payload?.new?.id){
-      let newPost = {...payload.new};
-      let res = await getUserData(newPost.userId);
-      if (res.success){
-        newPost.profile = res.data;
-        setPosts(prevPosts => [newPost, ...prevPosts]);
-      } else {
-        console.log('Error fetching user data for new post: ', res.msg);
-      }
+
+    if (payload.eventType === 'INSERT' && payload?.new?.id) {
+        let newPost = { ...payload.new };
+        let res = await getUserData(newPost.userId);
+        if (res.success) {
+            newPost.profile = res.data;
+            newPost.postLikes = [];      // ADDED: prevent PostCard crash on likes
+            newPost.comments = [];       // ADDED: prevent PostCard crash on comments
+            setPosts(prevPosts => [newPost, ...prevPosts]);
+        } else {
+            console.log('Error fetching user data for new post: ', res.msg);
+        }
+    }
+
+    if (payload.eventType === 'DELETE' && payload?.old?.id) {
+        setPosts(prevPosts => prevPosts.filter(post => post.id !== payload.old.id));
     }
   }
 
   useEffect(() => {
     let postChannel = supabase
-    .channel('posts')
-    .on('postgres_changes', { event: '*', schema: 'public', table: 'posts' }, handlePostEvent)
-    .subscribe();
-    // getPosts();
-    return () => {      
-      supabase.removeChannel(postChannel);
+        .channel('posts')
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'posts' }, handlePostEvent)
+        .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'posts' }, handlePostEvent)
+        .subscribe();
+
+    getPosts();
+
+    return () => {
+        supabase.removeChannel(postChannel);
     }
   }, [])
+
+  
 
   const getPosts = async () => {
     console.log('Fetching posts for feed...');

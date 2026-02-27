@@ -13,7 +13,16 @@ import { createPostLike, removePostLike } from '../services/postService'
 import { Alert } from 'react-native'
 
 
-const PostCard = ({ item, currentUser, router, hasShadow = true, showMoreIcon = true }) => {
+const PostCard = ({ 
+    item, 
+    currentUser, 
+    router,
+    hasShadow = true, 
+    showMoreIcon = true, 
+    showDelete=false, 
+    onDelete=()=>{},
+    onEdit=() => {}
+ }) => {
     const [likes, setLikes] = useState([]);
     const shadowStyles = {
         shadowOffset: {
@@ -95,6 +104,13 @@ const PostCard = ({ item, currentUser, router, hasShadow = true, showMoreIcon = 
         Share.share(content);
     }
 
+    const handlePostDelete = ()=>{
+        Alert.alert('Confirm Delete', 'Are you sure you want to delete this post?', [
+            {text: 'Cancel', style: 'cancel'},
+            {text: 'Delete', style: 'destructive', onPress: () => onDelete(item)}
+        ])
+    }
+
 
     return (
         <View style={[styles.container, hasShadow && shadowStyles]}>
@@ -117,6 +133,18 @@ const PostCard = ({ item, currentUser, router, hasShadow = true, showMoreIcon = 
                         <TouchableOpacity onPress={openPostDetails} style={styles.menuButton}>
                             <Icon name="threeDotsHorizontal" size={hp(2.8)} strokeWidth={3} color={theme.colors.onSecondary} />
                         </TouchableOpacity>
+                    )
+                }
+                {
+                    showDelete && item?.profile?.id === currentUser.id && (
+                        <View style={styles.actions}>
+                            <TouchableOpacity onPress={()=>onEdit(item)} style={styles.menuButton}>
+                                <Icon name="edit" size={hp(2.8)} strokeWidth={2} color={theme.colors.gray} />
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={handlePostDelete} style={styles.menuButton}>
+                                <Icon name="delete" size={hp(2.8)} strokeWidth={2} color={theme.colors.warning} />
+                            </TouchableOpacity>
+                        </View>
                     )
                 }
                 

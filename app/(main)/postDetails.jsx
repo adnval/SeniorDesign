@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Alert } from 'react-native'
 import React, {useEffect, useRef, useState} from 'react'
 import { useLocalSearchParams } from 'expo-router';
-import { fetchPostDetails, deleteComment } from '../../services/postService';
+import { fetchPostDetails, deleteComment, deletePost } from '../../services/postService';
 import {wp, hp} from '../../helpers/common'
 import { theme } from '../../constants/theme';
 import PostCard from '../../components/PostCard';
@@ -99,6 +99,21 @@ const postDetails = () => {
         }
     }
 
+    const onDeletePost = async (item) => {
+        let res = await deletePost(item.id);
+        if (res.success){
+            Alert.alert('Post Deleted', 'The post has been deleted successfully.', [
+                { text: 'OK', onPress: () => router.back() }
+            ]);
+        } else {
+            Alert.alert('Delete Post', 'Something went wrong. Please try again.');
+        }
+    }
+
+    const onEditPost = async (item) => {
+        // might implement later lol
+    }
+
     if (startLoading || !post) {
         return (
             <ScreenWrapper bg="white">
@@ -127,6 +142,9 @@ const postDetails = () => {
                         router={router}
                         hasShadow={false}
                         showMoreIcon={false}
+                        showDelete={true}
+                        onDelete={onDeletePost}
+                        onEdit={onEditPost}
                     />
                     <View style={{marginVertical: 15, gap: 17 }}>
                         {
