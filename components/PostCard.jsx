@@ -1,15 +1,20 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View, TouchableOpacity, Image, Share } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { theme } from '@/constants/theme'
 import { hp, wp } from '@/helpers/common'
 import Avatar from './Avatar'
 import moment from 'moment'
 import Icon from '@/assets/icons'
 import RenderHtml from 'react-native-render-html'
-import { getSupabaseFileUrl } from '../services/imageService'
+import { downloadFile, getSupabaseFileUrl } from '../services/imageService'
 import { Video } from 'expo-av'
+import { supabase } from '../lib/supabase'
+import { createPostLike, removePostLike } from '../services/postService'
+import { Alert } from 'react-native'
 
-const PostCard = ({ item, currentUser, router, hasShadow = true }) => {
+
+const PostCard = ({ item, currentUser, router, hasShadow = true, showMoreIcon = true }) => {
+    const [likes, setLikes] = useState([]);
     const shadowStyles = {
         shadowOffset: {
             width: 0,
@@ -34,16 +39,62 @@ const PostCard = ({ item, currentUser, router, hasShadow = true }) => {
         li: textStyle,
     }
 
+    useEffect(() => {
+        setLikes(item?.postLikes);
+    }, [])
+
     const createdAt = moment(item?.created_at).format('MMM D');
 
     const openPostDetails = () => {
-        router.push(`/post/${item.id}`);
-    }
+        if (!showMoreIcon) return; // if we're not showing the more icon, we shouldn't navigate to details on press
+    router.push({
+        pathname: '/(main)/postDetails', // FIXED: needs full path with folder prefix
+        params: { postId: item?.id }
+    });
+}
 
     const hasImage = item?.image && item.image.includes('postImages');
     const hasVideo = item?.image && item.image.includes('postVideos');
-    const liked=true;
-    const likes = [];
+    const liked=likes.filter(like=> like.UserId ==currentUser.id)[0]? true : false;
+
+    const onLike = async () => {
+        if (liked){
+            let updatedLikes = likes.filter(like=> like.UserId!= currentUser.id);
+            setLikes(updatedLikes);
+            let res = await removePostLike(item?.id, currentUser.id);
+            if (res.success){
+                console.log('Post unliked successfully: ', res.data); 
+            } else {
+                Alert.alert('Post', 'Something went wrong!')
+            }
+        } else {
+            let data = {
+                UserId: item.profile?.id,
+                postId: item?.id
+            }
+            setLikes([...likes, data]);
+            let res = await createPostLike(data);
+            if (res.success){
+                console.log('Post liked successfully: ', res.data); 
+            } else {
+                Alert.alert('Post', 'Something went wrong!')
+            }
+        }
+
+        console.log('Like button pressed for post: ', item.id);
+    }
+
+    const onShare = async () => {
+        let content = {message: item?.caption};
+        let strippedContent = content.message.replace(/<[^>]*>?/gm, ''); // remove html tags
+        content.message = strippedContent;
+        if (item?.image){
+            let url = await downloadFile(getSupabaseFileUrl(item.image)?.uri);
+            content.url = url;
+        }
+        Share.share(content);
+    }
+
 
     return (
         <View style={[styles.container, hasShadow && shadowStyles]}>
@@ -61,9 +112,14 @@ const PostCard = ({ item, currentUser, router, hasShadow = true }) => {
                         <Text style={styles.postDate}>{createdAt}</Text>
                     </View>
                 </View>
-                <TouchableOpacity onPress={openPostDetails} style={styles.menuButton}>
-                    <Icon name="threeDotsHorizontal" size={hp(2.8)} strokeWidth={3} color={theme.colors.onSecondary} />
-                </TouchableOpacity>
+                {
+                    showMoreIcon && (
+                        <TouchableOpacity onPress={openPostDetails} style={styles.menuButton}>
+                            <Icon name="threeDotsHorizontal" size={hp(2.8)} strokeWidth={3} color={theme.colors.onSecondary} />
+                        </TouchableOpacity>
+                    )
+                }
+                
             </View>
 
             {/* Caption */}
@@ -96,15 +152,15 @@ const PostCard = ({ item, currentUser, router, hasShadow = true }) => {
                 />
             )}
         <View style={styles.footer}>
-            <TouchableOpacity style={styles.footerButton}>
+            <TouchableOpacity style={styles.footerButton} onPress={onLike}>
                 <Icon name="heart" fill={liked ? theme.colors.onTertiary : 'none'} size={hp(2.2)} strokeWidth={2} color={liked? theme.colors.onTertiary: theme.colors.gray} />
                 <Text style={styles.count}>{likes?.length}</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.footerButton}>
+            <TouchableOpacity style={styles.footerButton} onPress={openPostDetails}>
                 <Icon name="comment" size={hp(2.2)} strokeWidth={2} color={theme.colors.gray} />
-                <Text style={styles.count}>{likes?.length}</Text>
+                <Text style={styles.count}>{item.comments[0]?.count ?? 0}</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.footerButton}>
+            <TouchableOpacity style={styles.footerButton} onPress={onShare}>
                 <Icon name="share" size={hp(2.2)} strokeWidth={2} color={theme.colors.gray} />
             </TouchableOpacity>
         

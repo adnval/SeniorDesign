@@ -42,7 +42,9 @@ export const fetchPosts = async (limit=10)=>{
         .from('posts')
         .select(`
             *,
-            profile: profiles (id, name, image, username)
+            profile: profiles (id, name, image, username),
+            postLikes (*),
+            comments (count)
             `)
         .order('created_at', { ascending: false })
         .limit(limit);
@@ -56,5 +58,110 @@ export const fetchPosts = async (limit=10)=>{
     } catch(error){
         console.log('Error fetching posts: ', error);
         return {success: false, msg: "Error fetching posts"};
+    }
+}
+
+export const createPostLike = async (postLike)=>{
+    try{
+        const {data, error} = await supabase
+        .from('postLikes')
+        .insert(postLike)
+        .select()
+        .single();
+
+        if(error){
+            console.log('Supabase error creating post like: ', error);
+            return {success: false, msg: "Error creating post like"};
+        }
+        return {success: true, data: data};
+
+    } catch(error){
+        console.log('Error creating post like: ', error);
+        return {success: false, msg: "Error creating post like"};
+    }
+}
+
+export const removePostLike = async (postId, userId)=>{
+    try{
+        const {error} = await supabase
+        .from('postLikes')
+        .delete()
+        .eq('postId', postId)
+        .eq('UserId', userId)
+
+        if(error){
+            console.log('Supabase error removing post like: ', error);
+            return {success: false, msg: "Error removing post like"};
+        }
+        return {success: true};
+
+    } catch(error){
+        console.log('Error removing post like: ', error);
+        return {success: false, msg: "Error removing post like"};
+    }
+}
+
+export const fetchPostDetails = async (postId)=>{
+    try{
+        const {data, error} = await supabase
+        .from('posts')
+        .select(`
+            *,
+            profile: profiles (id, name, image, username),
+            postLikes (*),
+            comments (*, user: profiles(id, name, image))
+            `)
+        .eq('id', postId)
+        .order('created_at', { ascending: false, foreignTable: 'comments' })
+        .single();
+
+        if(error){
+            console.log('Supabase error fetching post details: ', error);
+            return {success: false, msg: "Error fetching post details"};
+        }
+        return {success: true, data: data};
+
+    } catch(error){
+        console.log('Error fetching post details: ', error);
+        return {success: false, msg: "Error fetching post details"};
+    }
+}
+
+export const createComment = async (comment)=>{
+    try{
+        const {data, error} = await supabase
+        .from('comments')
+        .insert(comment)
+        .select()
+        .single();
+
+        if(error){
+            console.log('Supabase error creating comment: ', error);
+            return {success: false, msg: "Error creating comment"};
+        }
+        return {success: true, data: data};
+
+    } catch(error){
+        console.log('Error creating comment: ', error);
+        return {success: false, msg: "Error creating comment"};
+    }
+}
+
+export const deleteComment = async (commentId)=>{
+    try{
+        const {error} = await supabase
+        .from('comments')
+        .delete()
+        .eq('id', commentId)
+
+        if(error){
+            console.log('Supabase error removing comment: ', error);
+            return {success: false, msg: "Error removing comment"};
+        }
+        return {success: true};
+
+    } catch(error){
+        console.log('Error removing comment: ', error);
+        return {success: false, msg: "Error removing comment"};
     }
 }

@@ -1,4 +1,4 @@
-import { Slot, useRouter } from "expo-router";
+import { Slot, useRouter, Stack } from "expo-router";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { useEffect, useState } from "react";
@@ -33,7 +33,17 @@ function MainLayout() {
     }
   }, [user, mounted]);
 
-  return <Slot />; // required for root layout
+  return (
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen
+        name="(main)/postDetails"
+        options={{
+          presentation: "modal",
+          headerShown: false, // modal still needs this or it shows a default header
+        }}
+      />
+    </Stack>
+);
 }
 
 
