@@ -165,3 +165,30 @@ export const deleteComment = async (commentId)=>{
         return {success: false, msg: "Error removing comment"};
     }
 }
+
+export const parseWKBPoint = (wkb) => {
+    if (!wkb || typeof wkb !== 'string') return null
+    try {
+        const bytes = new Uint8Array(wkb.match(/.{1,2}/g).map(b => parseInt(b, 16)))
+        const view = new DataView(bytes.buffer)
+
+        // byte 0: byte order, bytes 1-4: type, check for SRID flag
+        const hasSRID = (view.getUint32(1, true) & 0x20000000) !== 0
+        const offset = hasSRID ? 9 : 5  // skip byte order(1) + type(4) + optional SRID(4)
+
+        const lng = view.getFloat64(offset, true)
+        const lat = view.getFloat64(offset + 8, true)
+
+        console.log('Parsed WKB - lat:', lat, 'lng:', lng)
+
+        if (isNaN(lat) || isNaN(lng)) return null
+        return { latitude: lat, longitude: lng }
+    } catch (e) {
+        console.log('WKB parse error:', e)
+        return null
+    }
+}
+
+export const getPostCoords = (post) => {
+    return parseWKBPoint(post.location)
+}

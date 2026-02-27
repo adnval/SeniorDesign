@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Pressable, Image } from 'react-native'
-import React, {useRef, useState} from 'react'
+import React, {useRef, useState, useEffect} from 'react'
 import LogoHeader from '@/components/LogoHeader'
 import { theme } from "@/constants/theme";
 import { wp, hp } from '@/helpers/common';
@@ -17,8 +17,8 @@ import { getUserImageSrc } from '@/services/imageService';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import HomeBar from '@/components/HomeBar';
 import ScreenWrapper from '@/components/ScreenWrapper';
-
 import { useLocalSearchParams } from 'expo-router';
+import * as Location from 'expo-location';
 
 const CreatePost = () => {
     const { uri } = useLocalSearchParams();
@@ -27,9 +27,26 @@ const CreatePost = () => {
     const bodyRef = useRef("");
     const editorRef = useRef("");
     const router = useRouter();
-    
-    // Initialize file from the captured photo URI if provided
+    const [location, setLocation] = useState(null);
     const [file, setFile] = useState(uri ? { uri, type: 'image' } : null);
+
+    useEffect(() => {
+        getLocation();
+    }, []);
+
+    const getLocation = async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+            // Default location if user denies - using New York as fallback
+            setLocation({ latitude: 40.7128, longitude: -74.0060 });
+            return;
+        }
+        let loc = await Location.getCurrentPositionAsync({});
+        setLocation({
+            latitude: loc.coords.latitude,
+            longitude: loc.coords.longitude,
+        });
+    }
 
     const onPick = async (isImage)=>{
         let mediaConfig = {
@@ -59,9 +76,10 @@ const CreatePost = () => {
         }
 
         let data = {
-            file: file, // CHANGED: was "image: file", needs to be "file" so createOrUpdatePost can detect and upload it
+            file: file,
             caption: bodyRef.current,
             userId: user?.id,
+            location: location ? `POINT(${location.longitude} ${location.latitude})` : 'POINT(-74.0060 40.7128)',
         }
 
         // create post
