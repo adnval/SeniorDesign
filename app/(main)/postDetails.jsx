@@ -21,6 +21,7 @@ import { createComment } from '@/services/postService';
 import BackButton from '../../components/BackButton'; // ADDED
 import HomeBar from '../../components/HomeBar';
 import CommentItem from '../../components/CommentItem';
+import { createNotification } from '@/services/notificationService';
 
 
 const postDetails = () => {
@@ -82,7 +83,15 @@ const postDetails = () => {
         setLoading(true);
         let res = await createComment(data);
         if (res.success){
-            console.log('Comment created successfully: ', res.data);
+            if(user.id !== post.profile?.id){ 
+                let notificationData = {
+                    senderID: user.id,
+                    receiverID: post.profile?.id,
+                    title: "commented on your post",
+                    data: JSON.stringify({ postId: post.id, commentId: res.data.id }),
+                }
+                createNotification(notificationData);
+            }
             setPost(prevPost => ({                          // ADDED: append new comment to post state so it shows immediately
                 ...prevPost,
                 comments: [...prevPost.comments, {
