@@ -11,6 +11,7 @@ import { Video } from 'expo-av'
 import { supabase } from '../lib/supabase'
 import { createPostLike, removePostLike } from '../services/postService'
 import { Alert } from 'react-native'
+import { createNotification } from '@/services/notificationService'
 
 
 const PostCard = ({ 
@@ -65,8 +66,10 @@ const PostCard = ({
     const hasImage = item?.image && item.image.includes('postImages');
     const hasVideo = item?.image && item.image.includes('postVideos');
     const liked=likes.filter(like=> like.UserId ==currentUser.id)[0]? true : false;
+    console.log('Rendering PostCard for post: ', item);
 
     const onLike = async () => {
+        console.log('Like button pressed for post: ', item.id, ' Current like status: ', liked);
         if (liked){
             let updatedLikes = likes.filter(like=> like.UserId!= currentUser.id);
             setLikes(updatedLikes);
@@ -84,6 +87,15 @@ const PostCard = ({
             setLikes([...likes, data]);
             let res = await createPostLike(data);
             if (res.success){
+                if(currentUser.id !== item.profile?.id){ 
+                                let notificationData = {
+                                    senderID: currentUser.id,
+                                    receiverID: item.profile?.id,
+                                    title: "likedyour post",
+                                    data: JSON.stringify({ postId: item.id, commentId: res.data.id }),
+                                }
+                                createNotification(notificationData);
+                            }
                 console.log('Post liked successfully: ', res.data); 
             } else {
                 Alert.alert('Post', 'Something went wrong!')
