@@ -81,7 +81,7 @@ const PostCard = ({
             }
         } else {
             let data = {
-                UserId: item.profile?.id,
+                UserId: currentUser.id,
                 postId: item?.id
             }
             setLikes([...likes, data]);
@@ -91,7 +91,7 @@ const PostCard = ({
                                 let notificationData = {
                                     senderID: currentUser.id,
                                     receiverID: item.profile?.id,
-                                    title: "likedyour post",
+                                    title: "liked your post",
                                     data: JSON.stringify({ postId: item.id, commentId: res.data.id }),
                                 }
                                 createNotification(notificationData);
@@ -192,7 +192,7 @@ const PostCard = ({
                 />
             )}
         <View style={styles.footer}>
-            <TouchableOpacity style={styles.footerButton} onPress={onLike}>
+            <TouchableOpacity style={styles.footerButton} onPress={onLike} activeOpacity={1}>
                 <Icon name="heart" fill={liked ? theme.colors.onTertiary : 'none'} size={hp(2.2)} strokeWidth={2} color={liked? theme.colors.onTertiary: theme.colors.gray} />
                 <Text style={styles.count}>{likes?.length}</Text>
             </TouchableOpacity>

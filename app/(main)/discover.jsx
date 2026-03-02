@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, TouchableOpacity, Image, ActivityIndicator } from 'react-native'
+import { StyleSheet, View, Text, TouchableOpacity, Image, ActivityIndicator, Modal } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps'
 import * as Location from 'expo-location'
@@ -21,6 +21,8 @@ const MapScreen = () => {
     const [userLocation, setUserLocation] = useState(null)
     const [loading, setLoading] = useState(true)
     const [selectedPost, setSelectedPost] = useState(null)
+    const [locationEnabled, setLocationEnabled] = useState(null) // null = unknown, true = granted, false = denied
+    const [showLocationPrompt, setShowLocationPrompt] = useState(false)
 
     useEffect(() => {
         init()
@@ -32,39 +34,59 @@ const MapScreen = () => {
     }
 
     const getUserLocation = async () => {
-        let { status } = await Location.requestForegroundPermissionsAsync()
-        if (status !== 'granted') {
-            setUserLocation(DEFAULT_LOCATION)
-            return
+        // Check current permission status without prompting yet
+        const { status: existingStatus } = await Location.getForegroundPermissionsAsync()
+
+        if (existingStatus === 'granted') {
+            setLocationEnabled(true)
+            await fetchUserLocation()
+        } else if (existingStatus === 'denied') {
+            // Already denied previously — disable silently
+            setLocationEnabled(false)
+        } else {
+            // Status is 'undetermined' — show our custom prompt first
+            setShowLocationPrompt(true)
         }
-        let loc = await Location.getCurrentPositionAsync({})
-        setUserLocation({
-            latitude: loc.coords.latitude,
-            longitude: loc.coords.longitude,
-        })
+    }
+
+    const fetchUserLocation = async () => {
+        try {
+            let loc = await Location.getCurrentPositionAsync({})
+            setUserLocation({
+                latitude: loc.coords.latitude,
+                longitude: loc.coords.longitude,
+            })
+        } catch {
+            setUserLocation(DEFAULT_LOCATION)
+        }
+    }
+
+    const handleAllowLocation = async () => {
+        setShowLocationPrompt(false)
+        const { status } = await Location.requestForegroundPermissionsAsync()
+        if (status === 'granted') {
+            setLocationEnabled(true)
+            await fetchUserLocation()
+        } else {
+            setLocationEnabled(false)
+        }
+    }
+
+    const handleDenyLocation = () => {
+        setShowLocationPrompt(false)
+        setLocationEnabled(false)
     }
 
     const loadPosts = async () => {
         let res = await fetchPosts(1000)
         if (res.success) {
-            console.log('Total posts fetched: ', res.data.length)
-            console.log('Posts with location: ', res.data.filter(p => p.location?.coordinates).length)
-            console.log('Sample post locations: ', res.data.slice(0, 3).map(p => ({
-                id: p.id,
-                location: p.location,
-                hasCoords: !!p.location?.coordinates
-            })))
-            const postsWithLocation = res.data.filter(p => {
-                const coords = parseWKBPoint(p.location)
-                console.log('Post', p.id, '- parsed coords:', coords)
-                return coords !== null
-            })
+            const postsWithLocation = res.data.filter(p => parseWKBPoint(p.location) !== null)
             setPosts(postsWithLocation)
         }
     }
 
     const centerOnUser = () => {
-        if (!userLocation || !mapRef.current) return
+        if (!locationEnabled || !userLocation || !mapRef.current) return
         mapRef.current.animateToRegion({
             ...userLocation,
             latitudeDelta: 0.05,
@@ -72,27 +94,27 @@ const MapScreen = () => {
         }, 600)
     }
 
-  const centerOnNearestPost = () => {
-      if (!userLocation || posts.length === 0 || !mapRef.current) return
+    const centerOnNearestPost = () => {
+        if (!userLocation || posts.length === 0 || !mapRef.current) return
 
-      const nearest = posts.reduce((closest, post) => {
-          const coords = getPostCoords(post)
-          if (!coords) return closest
-          const dist = Math.abs(coords.latitude - userLocation.latitude) + Math.abs(coords.longitude - userLocation.longitude)
-          const closestCoords = getPostCoords(closest)
-          const closestDist = Math.abs(closestCoords.latitude - userLocation.latitude) + Math.abs(closestCoords.longitude - userLocation.longitude)
-          return dist < closestDist ? post : closest
-      })
+        const nearest = posts.reduce((closest, post) => {
+            const coords = getPostCoords(post)
+            if (!coords) return closest
+            const dist = Math.abs(coords.latitude - userLocation.latitude) + Math.abs(coords.longitude - userLocation.longitude)
+            const closestCoords = getPostCoords(closest)
+            const closestDist = Math.abs(closestCoords.latitude - userLocation.latitude) + Math.abs(closestCoords.longitude - userLocation.longitude)
+            return dist < closestDist ? post : closest
+        })
 
-      const coords = getPostCoords(nearest)
-      setSelectedPost(nearest)
-      mapRef.current.animateToRegion({
-          latitude: coords.latitude,
-          longitude: coords.longitude,
-          latitudeDelta: 0.02,
-          longitudeDelta: 0.02,
-      }, 600)
-  }
+        const coords = getPostCoords(nearest)
+        setSelectedPost(nearest)
+        mapRef.current.animateToRegion({
+            latitude: coords.latitude,
+            longitude: coords.longitude,
+            latitudeDelta: 0.02,
+            longitudeDelta: 0.02,
+        }, 600)
+    }
 
     const openPost = (post) => {
         router.push({
@@ -126,7 +148,7 @@ const MapScreen = () => {
                         latitudeDelta: 0.08,
                         longitudeDelta: 0.08,
                     }}
-                    showsUserLocation
+                    showsUserLocation={locationEnabled === true}
                     showsMyLocationButton={false}
                 >
                     {posts.map(post => {
@@ -153,11 +175,19 @@ const MapScreen = () => {
                     })}
                 </MapView>
 
-                {/* Center on user button */}
-                <TouchableOpacity style={styles.locationButton} onPress={centerOnUser}>
+                {/* Center on user button — disabled if location not enabled */}
+                <TouchableOpacity
+                    style={[styles.locationButton, locationEnabled === false && styles.locationButtonDisabled]}
+                    onPress={centerOnUser}
+                    disabled={locationEnabled === false}
+                >
                     <Text style={styles.locationButtonText}>📍</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.locationButton, { bottom: 210 }]} onPress={centerOnNearestPost}>
+
+                <TouchableOpacity
+                    style={[styles.locationButton, { bottom: 210 }]}
+                    onPress={centerOnNearestPost}
+                >
                     <Text style={styles.locationButtonText}>🗺️</Text>
                 </TouchableOpacity>
 
@@ -189,6 +219,30 @@ const MapScreen = () => {
                         )}
                     </TouchableOpacity>
                 )}
+
+                {/* Location Permission Prompt Modal */}
+                <Modal
+                    visible={showLocationPrompt}
+                    transparent
+                    animationType="fade"
+                    onRequestClose={handleDenyLocation}
+                >
+                    <View style={styles.modalOverlay}>
+                        <View style={styles.modalCard}>
+                            <Text style={styles.modalEmoji}>📍</Text>
+                            <Text style={styles.modalTitle}>Enable Location?</Text>
+                            <Text style={styles.modalBody}>
+                                Allow access to your location to see where you are on the map and find nearby posts.
+                            </Text>
+                            <TouchableOpacity style={styles.modalButtonPrimary} onPress={handleAllowLocation}>
+                                <Text style={styles.modalButtonPrimaryText}>Allow Location</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.modalButtonSecondary} onPress={handleDenyLocation}>
+                                <Text style={styles.modalButtonSecondaryText}>Not Now</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </Modal>
             </View>
             <HomeBar active="discover" />
         </ScreenWrapper>
@@ -209,30 +263,19 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    markerContainer: {
+    markerShadow: {
+        borderRadius: 999,
         borderWidth: 2.5,
         borderColor: 'white',
-        borderRadius: 999,
-        overflow: 'hidden',
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,
         shadowRadius: 4,
         elevation: 4,
     },
-    markerShadow: {
-    borderRadius: 999,
-    borderWidth: 2.5,
-    borderColor: 'white',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 4,
-    },
     markerInner: {
         borderRadius: 999,
-        overflow: 'hidden',   // clips avatar to circle without killing the shadow on the outer view
+        overflow: 'hidden',
     },
     markerSelected: {
         borderColor: theme.colors.primary,
@@ -253,6 +296,9 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.15,
         shadowRadius: 4,
         elevation: 4,
+    },
+    locationButtonDisabled: {
+        opacity: 0.35,
     },
     locationButtonText: {
         fontSize: 20,
@@ -298,5 +344,67 @@ const styles = StyleSheet.create({
         height: 52,
         borderRadius: theme.radius.md,
         marginLeft: 10,
+    },
+    // Modal styles
+    modalOverlay: {
+        flex: 1,
+        backgroundColor: 'rgba(0,0,0,0.45)',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 32,
+    },
+    modalCard: {
+        backgroundColor: 'white',
+        borderRadius: theme.radius.xl,
+        padding: 28,
+        alignItems: 'center',
+        width: '100%',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 8 },
+        shadowOpacity: 0.18,
+        shadowRadius: 20,
+        elevation: 10,
+    },
+    modalEmoji: {
+        fontSize: 40,
+        marginBottom: 12,
+    },
+    modalTitle: {
+        fontSize: hp(2.4),
+        fontWeight: '700',
+        color: theme.colors.onSecondary,
+        marginBottom: 8,
+        textAlign: 'center',
+    },
+    modalBody: {
+        fontSize: hp(1.8),
+        color: theme.colors.gray,
+        textAlign: 'center',
+        lineHeight: hp(2.8),
+        marginBottom: 24,
+    },
+    modalButtonPrimary: {
+        backgroundColor: theme.colors.primary,
+        borderRadius: theme.radius.lg,
+        paddingVertical: 13,
+        paddingHorizontal: 32,
+        width: '100%',
+        alignItems: 'center',
+        marginBottom: 10,
+    },
+    modalButtonPrimaryText: {
+        color: 'white',
+        fontSize: hp(1.9),
+        fontWeight: '600',
+    },
+    modalButtonSecondary: {
+        paddingVertical: 10,
+        width: '100%',
+        alignItems: 'center',
+    },
+    modalButtonSecondaryText: {
+        color: theme.colors.gray,
+        fontSize: hp(1.8),
+        fontWeight: '500',
     },
 })
