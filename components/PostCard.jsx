@@ -136,7 +136,9 @@ const PostCard = ({
                         rounded={theme.radius.md}
                     />
                     <View style={{ gap: 3 }}>
-                        <Text style={styles.userName}>{item?.profile?.username}</Text>
+                        <TouchableOpacity onPress={() => router.push({ pathname: '/(main)/userProfile', params: { userId: item?.profile?.id } })}>
+                            <Text style={styles.userName}>{item?.profile?.username}</Text>
+                        </TouchableOpacity>
                         <Text style={styles.postDate}>{createdAt}</Text>
                     </View>
                 </View>

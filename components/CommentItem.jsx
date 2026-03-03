@@ -6,9 +6,11 @@ import { hp } from '../helpers/common'
 import moment from 'moment'
 import Icon from '@/assets/icons'
 import { useAuth } from '@/contexts/AuthContext'
+import { useRouter } from 'expo-router'
 
 const CommentItem = ({ item, onDelete }) => {
     const { userData } = useAuth();
+    const router = useRouter();
     const profile = userData?.data ?? userData ?? {};
     const createdAt = moment(item?.created_at).fromNow();
     const canDelete = item?.userId === profile?.id;
@@ -19,7 +21,9 @@ const CommentItem = ({ item, onDelete }) => {
             <View style={styles.content}>
                 <View style={styles.header}>
                     <View style={styles.nameRow}>
-                        <Text style={styles.name}>{item?.user?.name}</Text>
+                        <TouchableOpacity onPress={() => router.push({ pathname: '/(main)/userProfile', params: { userId: item?.userId } })}>
+                            <Text style={styles.name}>{item?.user?.name}</Text>
+                        </TouchableOpacity>
                         <Text style={styles.dot}>·</Text>
                         <Text style={styles.time}>{createdAt}</Text>
                     </View>
