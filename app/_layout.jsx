@@ -34,7 +34,7 @@ function MainLayout() {
   }, [user, mounted]);
 
   return (
-    <Stack screenOptions={{ headerShown: false }}>
+    <Stack screenOptions={{ headerShown: false, animation: "none", animationDuration: 0 }}>
       <Stack.Screen
         name="(main)/postDetails"
         options={{
@@ -45,5 +45,3 @@ function MainLayout() {
     </Stack>
 );
 }
-
-
