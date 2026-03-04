@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { StyleSheet, View, ScrollView, Image, Pressable } from "react-native";
+import React from "react";
+import { StyleSheet, View, ScrollView, Pressable, Alert } from "react-native";
 import { useAuth } from "@/contexts/AuthContext";
 import { Text } from "@/components/ui/text";
 import { Button, ButtonText } from "@/components/ui/button";
@@ -9,47 +9,43 @@ import HomeBar from "@/components/HomeBar";
 import LogoHeader from "@/components/LogoHeader";
 import ScreenWrapper from "@/components/ScreenWrapper";
 import Avatar from "@/components/Avatar";
-import { Alert } from "react-native";
-import {theme} from "@/constants/theme";
-import Icon from 'assets/icons'
+import { theme } from "@/constants/theme";
+import Icon from 'assets/icons';
 
 const Profile = () => {
-  const { user, userData, signOutUser, setAuth } = useAuth();
+  const { user, userData, signOutUser } = useAuth();
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
-
-  // Wait for userData to be fetched
-  useEffect(() => {
-    console.log("userData changed:", userData);
-    if (userData) setLoading(false);
-  }, [userData]);
 
   const handleSignOut = async () => {
-    console.log("Signing out user...");
     Alert.alert('Confirm Sign Out', 'Are you sure you want to sign out?', [
       {
         text: 'Cancel',
-        onPress: () => console.log('Sign out cancelled'),
-        style:'cancel',
+        style: 'cancel',
       },
       {
         text: 'Sign Out',
         onPress: async () => {
           try {
             await signOutUser();
-            console.log("User signed out successfully");
             router.replace("/welcome");
           } catch (error) {
-            console.error("Error signing out:", error);
             Alert.alert('Error', 'An error occurred while signing out. Please try again.');
           }
         },
-        style:'destructive',
+        style: 'destructive',
       },
     ]);
   };
 
-  if (!user || loading) {
+  if (!user) {
+    return (
+      <View style={styles.loadingContainer}>
+        <Text size="lg">Not signed in.</Text>
+      </View>
+    );
+  }
+
+  if (!userData) {
     return (
       <View style={styles.loadingContainer}>
         <Text size="lg">Loading profile...</Text>
@@ -57,109 +53,103 @@ const Profile = () => {
     );
   }
 
-  // Move profile definition here so it updates with userData changes
-  const profile = userData?.data ?? userData ?? {};
-  console.log("Rendering profile for user:", profile);
+  const profile = userData ?? {};
 
   return (
     <ScreenWrapper bg="white">
-      <LogoHeader title="Profile"/>
-    <View style={styles.container}>
-      {/* <LogoHeader /> */}
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        {/* Profile Header */}
-        <Card style={styles.profileHeader}>
-          <View style={styles.avatarContainer}>
-            <Avatar
-              uri={profile?.image ?? undefined}
-              size={100}
-              rounded={50}
-            />
-            <Pressable style={styles.editIcon} onPress={()=> router.push('/editProfile')}>
-              <Icon name="edit" strokeWidth={2} size={20} color={theme.colors.onSecondary}/>
-            </Pressable>
-          </View>
-          <Text size="xl" bold style={styles.name}>
-            {profile.name || "Your Name"}
-          </Text>
-          {profile.username && (
-            <Text style={styles.username}>{profile.username}</Text>
-          )}
-          <Pressable style={styles.infoRow} onPress={() => router.push('/MyPosts')}>
-                <Icon name="image" strokeWidth={2} size={20} color={theme.colors.onSecondary} />
-                <Text size="lg" bold style={{color: theme.colors.onSecondary}}>My Posts</Text>
-            </Pressable>
-        </Card>
+      <LogoHeader title="Profile" />
+      <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.scrollContent}>
 
-        <Card style={styles.sectionCard}>
-          <Text size="lg" bold style={styles.sectionTitle}>
-            Bio
-          </Text>
-          <View style={styles.infoRow}>
-            <Icon name="user" strokeWidth={2} size={20} color={theme.colors.onSecondary} />
-            <Text style={styles.detail}>
-              {profile.bio ?? "N/A"}
+          {/* Profile Header */}
+          <Card style={styles.profileHeader}>
+            <View style={styles.avatarContainer}>
+              <Avatar
+                uri={profile?.image ?? undefined}
+                size={100}
+                rounded={50}
+              />
+              <Pressable style={styles.editIcon} onPress={() => router.push('/editProfile')}>
+                <Icon name="edit" strokeWidth={2} size={20} color={theme.colors.onSecondary} />
+              </Pressable>
+            </View>
+            <Text size="xl" bold style={styles.name}>
+              {profile.name || "Your Name"}
             </Text>
-          </View>
+            {profile.username && (
+              <Text style={styles.username}>{profile.username}</Text>
+            )}
+            <Pressable style={styles.infoRow} onPress={() => router.push('/MyPosts')}>
+              <Icon name="image" strokeWidth={2} size={20} color={theme.colors.onSecondary} />
+              <Text size="lg" bold style={{ color: theme.colors.onSecondary }}>My Posts</Text>
+            </Pressable>
           </Card>
-        
 
-        {/* Contact & Info Section */}
-        <Card style={styles.sectionCard}>
-          <Text size="lg" bold style={styles.sectionTitle}>
-            Account Info
-          </Text>
-
-          <View style={styles.infoRow}>
-            <Icon name="call" strokeWidth={2} size={20} color={theme.colors.onSecondary} />
-            <Text style={styles.detail}>
-              Phone: {profile.phoneNumber ?? "N/A"}
+          {/* Bio Section */}
+          <Card style={styles.sectionCard}>
+            <Text size="lg" bold style={styles.sectionTitle}>
+              Bio
             </Text>
-          </View>
+            <View style={styles.infoRow}>
+              <Icon name="user" strokeWidth={2} size={20} color={theme.colors.onSecondary} />
+              <Text style={styles.detail}>
+                {profile.bio ?? "N/A"}
+              </Text>
+            </View>
+          </Card>
 
-          <View style={styles.infoRow}>
-            <Icon name="location" strokeWidth={2} size={20} color={theme.colors.onSecondary} />
-            <Text style={styles.detail}>
-              Address: {profile.address ?? "N/A"}
+          {/* Contact & Info Section */}
+          <Card style={styles.sectionCard}>
+            <Text size="lg" bold style={styles.sectionTitle}>
+              Account Info
             </Text>
-          </View>
+            <View style={styles.infoRow}>
+              <Icon name="call" strokeWidth={2} size={20} color={theme.colors.onSecondary} />
+              <Text style={styles.detail}>
+                Phone: {profile.phoneNumber ?? "N/A"}
+              </Text>
+            </View>
+            <View style={styles.infoRow}>
+              <Icon name="location" strokeWidth={2} size={20} color={theme.colors.onSecondary} />
+              <Text style={styles.detail}>
+                Address: {profile.address ?? "N/A"}
+              </Text>
+            </View>
+            <View style={styles.infoRow}>
+              <Icon name="mail" strokeWidth={2} size={20} color={theme.colors.onSecondary} />
+              <Text style={styles.detail}>
+                Email: {profile.email ?? "N/A"}
+              </Text>
+            </View>
+            <View style={styles.infoRow}>
+              <Icon name="lock" strokeWidth={2} size={20} color={theme.colors.onSecondary} />
+              <Text style={styles.detail}>
+                Account created:{" "}
+                {profile.created_at
+                  ? new Date(profile.created_at).toLocaleDateString()
+                  : "N/A"}
+              </Text>
+            </View>
+          </Card>
 
-          <View style={styles.infoRow}>
-            <Icon name="mail" strokeWidth={2} size={20} color={theme.colors.onSecondary} />
-            <Text style={styles.detail}>
-              Email: {profile.email ?? "N/A"}
+          {/* Actions Section */}
+          <Card style={styles.sectionCard}>
+            <Text size="lg" bold style={styles.sectionTitle}>
+              Actions
             </Text>
-          </View>
+            <Button onPress={() => router.push('/editProfile')} style={styles.actionButton}>
+              <ButtonText>Edit Profile</ButtonText>
+            </Button>
+            <Button onPress={handleSignOut} style={styles.actionButton}>
+              <ButtonText>Log out</ButtonText>
+            </Button>
+          </Card>
 
-          <View style={styles.infoRow}>
-            <Icon name="lock" strokeWidth={2} size={20} color={theme.colors.onSecondary} />
-            <Text style={styles.detail}>
-              Account created:{" "}
-              {profile.created_at
-                ? new Date(profile.created_at).toLocaleDateString()
-                : "N/A"}
-            </Text>
-          </View>
-        </Card>
+        </ScrollView>
 
-
-        {/* Actions Section */}
-        <Card style={styles.sectionCard}>
-          <Text size="lg" bold style={styles.sectionTitle}>
-            Actions
-          </Text>
-          <Button onPress={() => router.push('/editProfile')} style={styles.logoutButton}>
-            <ButtonText>Edit Profile</ButtonText>
-          </Button>
-          <Button onPress={handleSignOut} style={styles.logoutButton}>
-            <ButtonText>Log out</ButtonText>
-          </Button>
-        </Card>
-      </ScrollView>
-
-      {/* Home Bar fixed at bottom */}
-      <HomeBar active="profile" />
-    </View>
+        {/* Home Bar fixed at bottom */}
+        <HomeBar active="profile" />
+      </View>
     </ScreenWrapper>
   );
 };
@@ -178,7 +168,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: 16,
-    paddingBottom: 100, // space for HomeBar
+    paddingBottom: 100,
   },
   profileHeader: {
     padding: 24,
@@ -188,12 +178,6 @@ const styles = StyleSheet.create({
   },
   avatarContainer: {
     marginBottom: 12,
-  },
-  avatar: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: "#ddd",
   },
   name: {
     textAlign: "center",
@@ -211,8 +195,9 @@ const styles = StyleSheet.create({
   },
   detail: {
     marginBottom: 4,
+    flexShrink: 1,
   },
-  logoutButton: {
+  actionButton: {
     marginTop: 8,
     backgroundColor: theme.colors.onSecondary,
   },
@@ -230,10 +215,9 @@ const styles = StyleSheet.create({
     elevation: 7,
   },
   infoRow: {
-  flexDirection: 'row',
-  alignItems: 'center',
-  gap: 10,
-  marginVertical: 6,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginVertical: 6,
   },
-
 });

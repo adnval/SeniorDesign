@@ -28,6 +28,7 @@ const CreatePost = () => {
     const editorRef = useRef("");
     const router = useRouter();
     const [location, setLocation] = useState(null);
+    const [locationName, setLocationName] = useState(null);
     const [file, setFile] = useState(uri ? { uri, type: 'image' } : null);
 
     useEffect(() => {
@@ -35,35 +36,45 @@ const CreatePost = () => {
     }, []);
 
     const getLocation = async () => {
-    let { status } = await Location.requestForegroundPermissionsAsync();
+        let { status } = await Location.requestForegroundPermissionsAsync();
         if (status !== 'granted') {
-            // Default location if user denies - using New York as fallback
             setLocation({ latitude: 40.7128, longitude: -74.0060 });
+            setLocationName('New York, NY');
             return;
         }
         let loc = await Location.getCurrentPositionAsync({});
-        setLocation({
-            latitude: loc.coords.latitude,
-            longitude: loc.coords.longitude,
-        });
+        const coords = { latitude: loc.coords.latitude, longitude: loc.coords.longitude };
+        setLocation(coords);
+
+        try {
+            console.log('Reverse geocoding for coords:', coords);
+            let geo = await Location.reverseGeocodeAsync(coords);
+            if (geo?.[0]) {
+                const { city, region } = geo[0];
+                setLocationName([city, region].filter(Boolean).join(', '));
+                console.log('Location name set to:', [city, region].filter(Boolean).join(', '));
+            }
+        } catch (e) {
+            console.log('Reverse geocode error:', e);
+        }
     }
 
-    const onPick = async (isImage)=>{
+    // FIX 1: In onPick, guard against null assets
+    const onPick = async (isImage) => {
         let mediaConfig = {
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
             aspect: [4,3],
             quality: 0.7,
         }
-        if (!isImage){
+        if (!isImage) {
             mediaConfig = {
                 mediaTypes: ImagePicker.MediaTypeOptions.Videos,
                 allowsEditing: true
             }
         }
         let result = await ImagePicker.launchImageLibraryAsync(mediaConfig);
-        console.log('file: ', result.assets[0])
-        if (!result.canceled){
+        if (!result.canceled && result.assets?.[0]) { // FIXED: was result.assets[0] with no null check
             setFile(result.assets[0]);
         }
     }
@@ -82,118 +93,117 @@ const CreatePost = () => {
             location: location ? `POINT(${location.longitude} ${location.latitude})` : 'POINT(-74.0060 40.7128)',
         }
 
-        // create post
         let response = await createOrUpdatePost(data);
         console.log('Create post response: ', response);
         if (response.success) {
             alert('Post created successfully!');
-            router.replace('/home');
+            router.replace('/feed');
         } else {
             alert(response.msg || 'Error creating post. Please try again.');
         }
     }
 
-    const isLocalFile = file=>{
+    const isLocalFile = file => {
         if (!file) return null;
-        if(typeof file =='object') return true;
+        if (typeof file == 'object') return true;
         return false;
     }
-    const getFileType = file =>{
-        if(!file) return null;
-        if(isLocalFile(file)){
-            return file.type;
-        }
-        //check image or video for remote file
-        if(file.includes('postImage')){
-            return 'image';
-        }
+
+    const getFileType = file => {
+        if (!file) return null;
+        if (isLocalFile(file)) return file.type;
+        if (file.includes('postImage')) return 'image';
         return 'video';
     }
-    const getFileUri = file=>{
-        console.log('Getting file URI for file: ', file);
+
+    const getFileUri = file => {
         if (!file) return null;
-        if(isLocalFile(file)){
-            console.log('File is local, returning URI: ', file.uri);
-            return file.uri;
-        }
-        console.log('File is remote, constructing Supabase URL');
+        if (isLocalFile(file)) return file.uri;
         return getSupabaseFileUrl(file)?.uri;
     }
 
-
- return (
-    <ScreenWrapper bg="white">
-    <View style={styles.container}>
-        <LogoHeader title="Create Post"/>
-        <ScrollView 
-            contentContainerStyle={styles.scrollContent}
-            showsVerticalScrollIndicator={false}
-        >
-            <View style={styles.header}>
-                <Avatar
-                    uri={profile?.image ?? undefined}
-                    size={hp(6.5)}
-                    rounded={theme.radius.xl}
-                />
-                <View style={{gap: 3}}>
-                    <Text style={styles.username}>
-                        {profile && profile.username}
-                    </Text>
-                    <View style={styles.publicBadge}>
-                        <Icon name="user" size={11} color={theme.colors.secondary}/>
-                        <Text style={styles.publicText}>Public</Text>
+    return (
+        <ScreenWrapper bg="white">
+            <View style={styles.container}>
+                <LogoHeader title="Create Post" showBackButton={true}/>
+                <ScrollView
+                    contentContainerStyle={styles.scrollContent}
+                    showsVerticalScrollIndicator={false}
+                >
+                    <View style={styles.header}>
+                        <Avatar
+                            uri={profile?.image ?? undefined}
+                            size={hp(6.5)}
+                            rounded={theme.radius.xl}
+                        />
+                        <View style={{gap: 3}}>
+                            <Text style={styles.username}>
+                                {profile && profile.username}
+                            </Text>
+                            <View style={styles.publicBadge}>
+                                <Icon name="user" size={11} color={theme.colors.secondary}/>
+                                <Text style={styles.publicText}>Public</Text>
+                            </View>
+                        </View>
                     </View>
-                </View>
-            </View>
 
-            <View style={styles.textEditor}>
-                <RichTextEditor editorRef={editorRef} onChange={body => bodyRef.current = body} />
-            </View>
+                    <View style={styles.textEditor}>
+                        <RichTextEditor editorRef={editorRef} onChange={body => bodyRef.current = body} />
+                    </View>
 
-            {file && (
-                <View style={styles.file}>
-                    {getFileType(file) == 'video' ? (
-                        <Video
-                            source={{uri: getFileUri(file)}}
-                            style={{flex: 1}}
-                            resizeMode='cover'
-                            useNativeControls
-                            isLooping
-                        />
-                    ) : (
-                        <Image
-                            source={{uri: getFileUri(file)}}
-                            resizeMode='cover'
-                            style={{flex: 1}}
-                        />
+                    {/* ADDED: location card — only renders once geocode resolves, no flicker */}
+                    {locationName && (
+                        <View style={styles.locationCard}>
+                            <Icon name="location" size={16} color={theme.colors.primary} strokeWidth={2} />
+                            <Text style={styles.locationText}>{locationName}</Text>
+                        </View>
                     )}
-                    <Pressable onPress={() => setFile(null)} style={styles.closeIcon}>
-                        <Icon name="delete" size={20} color="#fff"/>
-                    </Pressable>
-                </View>
-            )}
 
-            <View style={styles.media}>
-                <Text style={styles.addImageText}>Add to your post</Text>
-                <View style={styles.mediaIcons}>
-                    <TouchableOpacity style={styles.mediaIconBtn} onPress={() => onPick(true)}>
-                        <Icon name="image" size={22} color={theme.colors.onSecondary}/>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.mediaIconBtn} onPress={() => onPick(false)}>
-                        <Icon name="video" size={22} color={theme.colors.onSecondary}/>
-                    </TouchableOpacity>
-                </View>
+                    {file && (
+                        <View style={styles.file}>
+                            {getFileType(file) == 'video' ? (
+                                <Video
+                                    source={{uri: getFileUri(file)}}
+                                    style={{flex: 1}}
+                                    resizeMode='cover'
+                                    useNativeControls
+                                    isLooping
+                                />
+                            ) : (
+                                <Image
+                                    source={{uri: getFileUri(file)}}
+                                    resizeMode='cover'
+                                    style={{flex: 1}}
+                                />
+                            )}
+                            <Pressable onPress={() => setFile(null)} style={styles.closeIcon}>
+                                <Icon name="delete" size={20} color="#fff"/>
+                            </Pressable>
+                        </View>
+                    )}
+
+                    <View style={styles.media}>
+                        <Text style={styles.addImageText}>Add to your post</Text>
+                        <View style={styles.mediaIcons}>
+                            <TouchableOpacity style={styles.mediaIconBtn} onPress={() => onPick(true)}>
+                                <Icon name="image" size={22} color={theme.colors.onSecondary}/>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.mediaIconBtn} onPress={() => onPick(false)}>
+                                <Icon name="video" size={22} color={theme.colors.onSecondary}/>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+
+                </ScrollView>
+                <SafeAreaView edges={['bottom']} style={styles.footer}>
+                    <Pressable style={styles.button} onPress={onSubmit}>
+                        <Text style={styles.buttonText}>Post</Text>
+                    </Pressable>
+                </SafeAreaView>
             </View>
-        </ScrollView>
-        <SafeAreaView edges={['bottom']} style={styles.footer}>
-            <Pressable style={styles.button} onPress={onSubmit}>
-                <Text style={styles.buttonText}>Post</Text>
-            </Pressable>
-        </SafeAreaView>
-    </View>
-    <HomeBar active="capture"/>
-    </ScreenWrapper>
-)
+            <HomeBar active="capture"/>
+        </ScreenWrapper>
+    )
 }
 
 export default CreatePost
@@ -206,7 +216,7 @@ const styles = StyleSheet.create({
     scrollContent: {
         gap: 20,
         paddingBottom: 20,
-        height: hp(50),
+        // height: hp(50),
     },
     header: {
         flexDirection: 'row',
@@ -296,5 +306,24 @@ const styles = StyleSheet.create({
         fontSize: hp(1.9),
         fontWeight: theme.fonts.semibold,
         letterSpacing: 0.3,
+    },
+    // ADDED: location card styles
+    locationCard: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
+        paddingHorizontal: 14,
+        paddingVertical: 10,
+        borderRadius: theme.radius.lg,
+        borderCurve: 'continuous',
+        borderWidth: 1,
+        borderColor: theme.colors.surface,
+        backgroundColor: theme.colors.surface,
+        alignSelf: 'flex-start',
+    },
+    locationText: {
+        fontSize: hp(1.7),
+        color: theme.colors.onSecondary,
+        fontWeight: theme.fonts.medium,
     },
 })

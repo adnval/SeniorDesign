@@ -7,73 +7,41 @@ interface AuthContextType {
   user: User | null;
   session: Session | null;
   userData: any | null;
-  setAuth: (user: User | null, session?: Session | null) => void;
   signOutUser: () => Promise<void>;
   updateUserData: (newData: any) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-interface AuthProviderProps {
-  children: ReactNode;
-}
-
-export const AuthProvider = ({ children }: AuthProviderProps) => {
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [userData, setUserData] = useState<any | null>(null);
 
-  const setAuth = (authUser: User | null, authSession: Session | null = null) => {
-    setUser(authUser);
-    setSession(authSession);
-  };
-
-  const signOutUser = async () => {
-    if (!user) {
-      console.warn("No user is currently signed in.");
-      return;
-    }
-    console.log("calling Sign out user...");
-    await supabase.auth.signOut();
-    console.log("Sign out complete, clearing auth state...");
-    setUser(null);
-    setSession(null);
-    setUserData(null);
-  };
-
-  // Fetch custom user data
   const fetchUserData = async (currentUser: User) => {
     try {
-      const data = await getUserData(currentUser.id);
-      setUserData(data);
-      console.log("Fetched user data after auth change:", data);
+      const result = await getUserData(currentUser.id);
+      if (result.success) {
+        setUserData(result.data);
+      } else {
+        setUserData(null);
+      }
     } catch (err) {
-      console.error("Failed to fetch user data:", err);
+      setUserData(null);
     }
   };
 
-  // Subscribe to Supabase auth changes
   useEffect(() => {
-    // Get current session on mount
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
-      const currentUser = session?.user ?? null;
-      setUser(currentUser);
-      setSession(session ?? null);
-
-      if (currentUser) {
-        await fetchUserData(currentUser);
-      }
-    });
-
-    // Listen for auth state changes
     const { data: subscription } = supabase.auth.onAuthStateChange(
-      async (_event, session) => {
+      (_event, session) => {
+        console.log("AUTH EVENT:", _event, "user:", session?.user?.id ?? "null");
         const currentUser = session?.user ?? null;
         setUser(currentUser);
         setSession(session ?? null);
 
         if (currentUser) {
-          await fetchUserData(currentUser);
+          // defer fetchUserData to next tick so auth lock is released first
+          setTimeout(() => fetchUserData(currentUser), 0);
         } else {
           setUserData(null);
         }
@@ -85,35 +53,29 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     };
   }, []);
 
-  //update user data in context after profile update
+  const signOutUser = async () => {
+    if (!user) {
+      console.warn("No user is currently signed in.");
+      return;
+    }
+    await supabase.auth.signOut();
+  };
+
   const updateUserData = async (newData: any) => {
-  console.log("Updating user data with:", newData);
-  if (user) {
+    if (!user) return;
     const result = await updateUser(user.id, newData);
     if (result.success) {
-      // Update the nested data property, not the root
-      setUserData((prev: any) => ({
-        ...prev,
-        data: {
-          ...prev?.data,
-          ...newData
-        }
-      }));
-      console.log("User data updated successfully:", result.data);
+      setUserData((prev: any) => ({ ...prev, ...newData }));
     }
-  }
-}
+  };
 
   return (
-    <AuthContext.Provider
-      value={{ user, session, userData, setAuth, signOutUser, updateUserData }}
-    >
+    <AuthContext.Provider value={{ user, session, userData, signOutUser, updateUserData }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-// Custom hook to use auth context
 export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (!context) throw new Error("useAuth must be used within an AuthProvider");

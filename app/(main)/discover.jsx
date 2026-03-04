@@ -126,7 +126,7 @@ const MapScreen = () => {
     if (loading) {
         return (
             <ScreenWrapper bg="white">
-                <LogoHeader title="Map" />
+                <LogoHeader title="Discover" />
                 <View style={styles.center}>
                     <ActivityIndicator size="large" color={theme.colors.primary} />
                 </View>
@@ -137,7 +137,7 @@ const MapScreen = () => {
 
     return (
         <ScreenWrapper bg="white">
-            <LogoHeader title="Map" />
+            {/* <LogoHeader title="Map" /> */}
             <View style={styles.container}>
                 <MapView
                     ref={mapRef}
