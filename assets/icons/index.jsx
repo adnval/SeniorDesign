@@ -22,6 +22,7 @@ import Delete from './Delete';
 import Logout from './logout';
 import Image from './Image';
 import Video from './Video';
+import CameraFlip from './CameraFlip';
 import time from './'
 
 const icons = {
@@ -46,6 +47,7 @@ const icons = {
     logout: Logout,
     image: Image,
     video: Video,
+    cameraFlip: CameraFlip,
 }
 
 const Icon = ({name, ...props}) => {
@@ -55,7 +57,7 @@ const Icon = ({name, ...props}) => {
         height={props.size || 24}
         width={props.size || 24}
         strokeWidth={props.strokeWidth || 1.9}
-        color={theme.colors.textLight}
+        color={theme.colors.primary}
         {...props}
     />
   )

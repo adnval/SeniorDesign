@@ -88,7 +88,7 @@ const Capture = () => {
           onPress={toggleCameraFacing}
           activeOpacity={0.7}
         >
-          <Icon name="arrowLeft" size={24} strokeWidth={2} color={theme.colors.onPrimary} />
+          <Icon name="cameraFlip" size={24} strokeWidth={2} color={theme.colors.onPrimary} />
         </TouchableOpacity>
 
         <TouchableOpacity
