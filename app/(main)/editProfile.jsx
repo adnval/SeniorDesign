@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { StyleSheet, View, ScrollView, Image, Pressable } from "react-native";
+import { StyleSheet, View, ScrollView, Image, Pressable, Alert } from "react-native";
 import { useAuth } from "@/contexts/AuthContext";
 import { Text } from "@/components/ui/text";
 import { Button, ButtonText } from "@/components/ui/button";
@@ -8,31 +8,21 @@ import { useRouter } from "expo-router";
 import HomeBar from "@/components/HomeBar";
 import LogoHeader from "@/components/LogoHeader";
 import ScreenWrapper from "@/components/ScreenWrapper";
-import Avatar from "@/components/Avatar";
-import { Alert } from "react-native";
-import {theme} from "@/constants/theme";
-import Icon from 'assets/icons'
+import { theme } from "@/constants/theme";
+import Icon from 'assets/icons';
 import * as ImagePicker from 'expo-image-picker';
-import { uploadFile } from "@/services/imageService";
-
+import { uploadFile, getUserImageSrc } from "@/services/imageService";
 import {
   Input,
   InputField,
   InputSlot,
   InputIcon,
 } from "@/components/ui/input";
-
-import { 
-  FormControl, 
-  FormControlLabel, 
+import {
+  FormControl,
+  FormControlLabel,
   FormControlLabelText,
-  FormControlHelper,
-  FormControlHelperText,
-  FormControlError,
-  FormControlErrorIcon,
-  FormControlErrorText
 } from "@/components/ui/form-control";
-import { getUserImageSrc } from "@/services/imageService";
 
 const EditProfile = () => {
   const { user, userData, updateUserData } = useAuth();
@@ -40,7 +30,6 @@ const EditProfile = () => {
   const [saving, setSaving] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
 
-  // Derive initial values directly from userData — single source of truth
   const [userDetails, setUserDetails] = useState({
     name: "",
     username: "",
@@ -50,23 +39,24 @@ const EditProfile = () => {
     image: "",
   });
 
-  // Only populate once when userData first loads — use a ref to prevent re-population
   const initialized = useRef(false);
+
+  // ✅ userData is now the flat profile object, no .data nesting
   useEffect(() => {
-    if (userData?.data && !initialized.current) {
+    if (userData && !initialized.current) {
       initialized.current = true;
       setUserDetails({
-        name: userData.data.name ?? "",
-        username: userData.data.username ?? "",
-        phoneNumber: userData.data.phoneNumber ?? "",
-        address: userData.data.address ?? "",
-        bio: userData.data.bio ?? "",
-        image: getUserImageSrc(userData.data.image) ?? "",
+        name: userData.name ?? "",
+        username: userData.username ?? "",
+        phoneNumber: userData.phoneNumber ?? "",
+        address: userData.address ?? "",
+        bio: userData.bio ?? "",
+        image: userData.image ?? "",
       });
     }
   }, [userData]);
 
-  const handleChange = (key, value) => {
+  const handleChange = (key: string, value: string) => {
     setUserDetails((prev) => ({ ...prev, [key]: value }));
   };
 
@@ -87,19 +77,15 @@ const EditProfile = () => {
     if (result.canceled) return;
 
     const pickedAsset = result.assets[0];
-
-    // Show local image immediately for instant feedback
     setUploadingImage(true);
     handleChange("image", pickedAsset.uri);
 
     const imageRes = await uploadFile("profiles", pickedAsset.uri, true);
 
     if (imageRes.success) {
-      // Swap local URI for the permanent Supabase path
       handleChange("image", imageRes.data);
     } else {
-      // Revert to whatever was saved before
-      handleChange("image", userData?.data?.image ?? "");
+      handleChange("image", userData?.image ?? ""); // ✅ flat, no .data
       Alert.alert("Upload Failed", imageRes.msg);
     }
     setUploadingImage(false);
@@ -119,7 +105,8 @@ const EditProfile = () => {
     }
   };
 
-  if (!user || !userData?.data) {
+  // ✅ flat check, no .data nesting
+  if (!user || !userData) {
     return (
       <View style={styles.loadingContainer}>
         <Text size="lg">Loading profile...</Text>
@@ -136,14 +123,12 @@ const EditProfile = () => {
           {/* Profile Picture */}
           <Card style={styles.profileHeader}>
             <View style={styles.avatarContainer}>
-              <Image source={getUserImageSrc(userDetails.image)} style={styles.avatar} />
+              <Image
+                source={getUserImageSrc(userDetails.image)}
+                style={styles.avatar}
+              />
               <Pressable style={styles.editIcon} onPress={onPickImage} disabled={uploadingImage}>
-                <Icon
-                  name="camera"
-                  strokeWidth={2}
-                  size={20}
-                  color={theme.colors.onSecondary}
-                />
+                <Icon name="camera" strokeWidth={2} size={20} color={theme.colors.onSecondary} />
               </Pressable>
             </View>
           </Card>
@@ -196,7 +181,7 @@ const EditProfile = () => {
 
           {/* Actions */}
           <Card style={styles.sectionCard}>
-            <Button onPress={saveChanges} style={styles.logoutButton} disabled={saving || uploadingImage}>
+            <Button onPress={saveChanges} style={styles.saveButton} disabled={saving || uploadingImage}>
               <ButtonText>{saving ? "Saving..." : "Save Changes"}</ButtonText>
             </Button>
             <Button onPress={() => router.back()} style={styles.cancelButton} disabled={saving}>
@@ -225,7 +210,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: 16,
-    paddingBottom: 100, // space for HomeBar
+    paddingBottom: 100,
   },
   profileHeader: {
     padding: 24,
@@ -242,31 +227,17 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     backgroundColor: "#ddd",
   },
-  name: {
-    textAlign: "center",
-  },
-  username: {
-    textAlign: "center",
-    color: "#666",
-  },
   sectionCard: {
     padding: 16,
     marginBottom: 16,
   },
-  sectionTitle: {
-    marginBottom: 8,
-  },
-  detail: {
-    marginBottom: 4,
-  },
-  logoutButton: {
+  saveButton: {
     marginTop: 8,
     backgroundColor: theme.colors.onSecondary,
   },
   cancelButton: {
     marginTop: 8,
     backgroundColor: theme.colors.secondary,
-    color: theme.colors.onSecondary,
   },
   editIcon: {
     position: "absolute",
@@ -282,10 +253,9 @@ const styles = StyleSheet.create({
     elevation: 7,
   },
   infoRow: {
-  flexDirection: 'row',
-  alignItems: 'center',
-  gap: 10,
-  marginVertical: 6,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginVertical: 6,
   },
-
 });

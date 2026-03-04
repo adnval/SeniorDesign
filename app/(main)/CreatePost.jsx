@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Pressable, Image } from 'react-native'
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Pressable, Image, ActivityIndicator } from 'react-native'
 import React, {useRef, useState, useEffect} from 'react'
 import LogoHeader from '@/components/LogoHeader'
 import { theme } from "@/constants/theme";
@@ -27,6 +27,7 @@ const CreatePost = () => {
     const bodyRef = useRef("");
     const editorRef = useRef("");
     const router = useRouter();
+    const [loading, setLoading] = useState(false);
     const [location, setLocation] = useState(null);
     const [locationName, setLocationName] = useState(null);
     const [file, setFile] = useState(uri ? { uri, type: 'image' } : null);
@@ -59,7 +60,6 @@ const CreatePost = () => {
         }
     }
 
-    // FIX 1: In onPick, guard against null assets
     const onPick = async (isImage) => {
         let mediaConfig = {
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -74,12 +74,13 @@ const CreatePost = () => {
             }
         }
         let result = await ImagePicker.launchImageLibraryAsync(mediaConfig);
-        if (!result.canceled && result.assets?.[0]) { // FIXED: was result.assets[0] with no null check
+        if (!result.canceled && result.assets?.[0]) {
             setFile(result.assets[0]);
         }
     }
 
     const onSubmit = async () => {
+        if (loading) return;
         console.log('Submitting post with body: ', bodyRef.current, ' and file: ', file);
         if (!bodyRef.current && !file) {
             alert('Please add a caption and media to your post before submitting.');
@@ -93,7 +94,9 @@ const CreatePost = () => {
             location: location ? `POINT(${location.longitude} ${location.latitude})` : 'POINT(-74.0060 40.7128)',
         }
 
+        setLoading(true);
         let response = await createOrUpdatePost(data);
+        setLoading(false);
         console.log('Create post response: ', response);
         if (response.success) {
             alert('Post created successfully!');
@@ -151,7 +154,6 @@ const CreatePost = () => {
                         <RichTextEditor editorRef={editorRef} onChange={body => bodyRef.current = body} />
                     </View>
 
-                    {/* ADDED: location card — only renders once geocode resolves, no flicker */}
                     {locationName && (
                         <View style={styles.locationCard}>
                             <Icon name="location" size={16} color={theme.colors.primary} strokeWidth={2} />
@@ -196,8 +198,16 @@ const CreatePost = () => {
 
                 </ScrollView>
                 <SafeAreaView edges={['bottom']} style={styles.footer}>
-                    <Pressable style={styles.button} onPress={onSubmit}>
-                        <Text style={styles.buttonText}>Post</Text>
+                    <Pressable
+                        style={[styles.button, loading && styles.buttonDisabled]}
+                        onPress={onSubmit}
+                        disabled={loading}
+                    >
+                        {loading ? (
+                            <ActivityIndicator size="small" color={theme.colors.onPrimary} />
+                        ) : (
+                            <Text style={styles.buttonText}>Post</Text>
+                        )}
                     </Pressable>
                 </SafeAreaView>
             </View>
@@ -216,7 +226,6 @@ const styles = StyleSheet.create({
     scrollContent: {
         gap: 20,
         paddingBottom: 20,
-        // height: hp(50),
     },
     header: {
         flexDirection: 'row',
@@ -301,13 +310,15 @@ const styles = StyleSheet.create({
         borderRadius: theme.radius.lg,
         alignItems: 'center',
     },
+    buttonDisabled: {
+        opacity: 0.6,
+    },
     buttonText: {
         color: theme.colors.onPrimary,
         fontSize: hp(1.9),
         fontWeight: theme.fonts.semibold,
         letterSpacing: 0.3,
     },
-    // ADDED: location card styles
     locationCard: {
         flexDirection: 'row',
         alignItems: 'center',
