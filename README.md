@@ -10,12 +10,12 @@ This repository contains extensive documentation outlining our team's work on th
     1. [User Stories](#user-stories-doc)
     2. [Design Diagrams](#design-diagrams-doc)
     3. [Diagram Conventions & Components](#diagram-conventions--components)
-5. [Project Tasks & Timeline](#project-tasks--timeline)
+5. [Project Tasks & Timeline](#project-tasks--timeline-doc)
     1. [Task List](#task-list)
-    2. [Timeline](#timeline)
-    3. [Effort Matrix](#effort-matrix)
-7. [ABET Concerns](#abet-concerns)
-8. [PPT Slideshow](#ppt-slideshow)
+    2. [Timeline](#timeline-doc)
+    3. [Effort Matrix](#effort-matrix-doc)
+7. [ABET Concerns](#abet-concerns-doc)
+8. [PPT Slideshow](#ppt-slideshow-doc)
 9. [Self-Assessment Essays](#self-assessment-essays)
 10. [Professional Biographies](#professional-biographies)
 11. [Budget](#budget)
@@ -89,7 +89,7 @@ one of many front end components, which perform calls to the database to fetch d
 processes communicating with the databases API layer. 
 
 
-## Project Tasks & Timeline ![[doc]](docs/CS5001/Assignment05_TaskList/Task_List.md)
+## Project Tasks & Timeline [[doc]](docs/CS5001/Assignment05_TaskList/Locale_TaskList.md)
 
 ### Task List
 The following table outlines tasks required for the successful completion of locale as well as their assignee. 
@@ -106,7 +106,7 @@ The following table outlines tasks required for the successful completion of loc
 | Develop a SAML 2FA system for user authentication                                                 | Maggie   |
 | Design database schema for posts, users, and locations                                            | Maggie   |
 | Develop post scheduler to map posts to database using ORM                                         | Maggie   |
-| Develop algorithm for recommending posts to users                                                 | Kevin    |
+| Develop algorithm for recommending posts to users       z                                          | Kevin    |
 | Develop and refine user interface based on UI mockups                                             | Maggie   |
 | Create content for application (wording, FAQ, notifications, etc.)                                | Kate     |
 | Integrate existing search tools to query for posts or users                                       | Kate     |
@@ -117,7 +117,7 @@ The following table outlines tasks required for the successful completion of loc
 | **Total Tasks**                                                                                   | **18**   |
 
 
-### Timeline ![[doc]](docs/CS5001/Assignment06_Milestones_Timeline_EffortMatrix/Locale_MilestonesTimelineEffortMatrix.pdf)
+### Timeline [[doc]](docs/CS5001/Assignment06_Milestones_Timeline_EffortMatrix/Locale_MilestonesTimelineEffortMatrix.pdf)
 The following table organizes tasks developed in the task list by related milestone. For each task, an expected time frame is defined. Milestones are marked as complete at the completion of the last associated task. 
 
 | Milestone | Start      | End        | Task                                   | Assignee | Time Frame              | Notes                           |
@@ -143,7 +143,7 @@ The following table organizes tasks developed in the task list by related milest
 | 5        | 3/7/26     | 4/17/26    | Buffer / Final Debugging & QA          | All      | 3/28/26 – 4/17/26        | Final stretch                     |
 
 
-### Effort Matrix ![[doc]](docs/CS5001/Assignment06_Milestones_Timeline_EffortMatrix/Locale_MilestonesTimelineEffortMatrix.pdf)
+### Effort Matrix [[doc]](docs/CS5001/Assignment06_Milestones_Timeline_EffortMatrix/Locale_MilestonesTimelineEffortMatrix.pdf)
 The following matrix breaks down hours estimates for each task defined above. For each task, an administrative margin of 10% is added to account for documentation, project management, etc. A 20% reserve margin is also applied to account for unexpected circumstances.  
 
 | Task                         | Assignee | Raw Effort (hrs) | + Admin (10%) | + Margin (20%) | Total (hrs) |
@@ -170,7 +170,7 @@ The following matrix breaks down hours estimates for each task defined above. Fo
 | **TOTALS**                    | —        | **156**          | **15.6**      | **31.2**       | **202.8**   |
 
 
-## ABET Concerns ![[doc]](docs/CS5001/Assignment07_ProjectConstraintsEssay/Locale_ConstraintsEssay.pdf)
+## ABET Concerns [[doc]](docs/CS5001/Assignment07_ProjectConstraintsEssay/Locale_ConstraintsEssay.pdf)
 There are certainly limitations to our project, as well as concerns we must 
 address before its completion. The first concern is an ethical one, allowing people 
 to create an AR effect using pictures they take of their surrounding era creates the 
@@ -198,7 +198,7 @@ will need to be a primary focus of our application if we want to launch more
 expansive testing/implementation of the media. We will need to research modern 
 security practices to protect people’s information effectively.
 
-## PPT Slideshow ![[doc]](docs/CS5001/Assignment08_DesignPresentation/Locale_DesignPresentation.pptx)
+## PPT Slideshow [[doc]](docs/CS5001/Assignment08_DesignPresentation/Locale_DesignPresentation.pptx)
 
 ## Self-Assessment Essays
 - [Kevin Chu](docs/CS5001/Assignment03_TeamContract_And_IndividualCapstoneAssessment/ChuKevin_IndividualCapstoneAssessment.md)
