@@ -106,7 +106,7 @@ The following table outlines tasks required for the successful completion of loc
 | Develop a SAML 2FA system for user authentication                                                 | Maggie   |
 | Design database schema for posts, users, and locations                                            | Maggie   |
 | Develop post scheduler to map posts to database using ORM                                         | Maggie   |
-| Develop algorithm for recommending posts to users       z                                          | Kevin    |
+| Develop algorithm for recommending posts to users                                                 | Kevin    |
 | Develop and refine user interface based on UI mockups                                             | Maggie   |
 | Create content for application (wording, FAQ, notifications, etc.)                                | Kate     |
 | Integrate existing search tools to query for posts or users                                       | Kate     |
