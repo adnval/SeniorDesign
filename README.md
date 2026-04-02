@@ -170,7 +170,7 @@ The following matrix breaks down hours estimates for each task defined above. Fo
 | **TOTALS**                    | —        | **156**          | **15.6**      | **31.2**       | **202.8**   |
 
 
-## ABET Concerns ![[doc]](docs/CS5001/Assignment07_ProjectConstraintsEssay/Locale_ConstraintsEssay.pdf)
+## ABET Concerns ![[doc]](docs/CS5001/Assignment07_Project_Constraints_Essay/Assignment #7 Constraint Essay.pdf)
 There are certainly limitations to our project, as well as concerns we must 
 address before its completion. The first concern is an ethical one, allowing people 
 to create an AR effect using pictures they take of their surrounding era creates the 
