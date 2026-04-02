@@ -10,16 +10,16 @@ This repository contains extensive documentation outlining our team's work on th
     1. [User Stories](#user-stories-doc)
     2. [Design Diagrams](#design-diagrams-doc)
     3. [Diagram Conventions & Components](#diagram-conventions--components)
-5. [Project Tasks & Timeline](#project-tasks--timeline-doc)
+4. [Project Tasks & Timeline](#project-tasks--timeline-doc)
     1. [Task List](#task-list)
     2. [Timeline](#timeline-doc)
     3. [Effort Matrix](#effort-matrix-doc)
-7. [ABET Concerns](#abet-concerns-doc)
-8. [PPT Slideshow](#ppt-slideshow-doc)
-9. [Self-Assessment Essays](#self-assessment-essays)
-10. [Professional Biographies](#professional-biographies)
-11. [Budget](#budget)
-12. [Appendix](#appendix)
+5. [ABET Concerns](#abet-concerns-doc)
+6. [PPT Slideshow](#ppt-slideshow-doc)
+7. [Self-Assessment Essays](#self-assessment-essays)
+8. [Professional Biographies](#professional-biographies)
+9. [Budget](#budget)
+10. [Appendix](#appendix)
 
 ## Team Names & Project Abstract
 
