@@ -16,6 +16,10 @@ This repository contains extensive documentation outlining our team's work on th
     3. [Effort Matrix](#effort-matrix-doc)
 7. [ABET Concerns](#abet-concerns-doc)
 8. [PPT Slideshow](#ppt-slideshow-doc)
+    2. [Timeline](#timeline-doc)
+    3. [Effort Matrix](#effort-matrix-doc)
+7. [ABET Concerns](#abet-concerns-doc)
+8. [PPT Slideshow](#ppt-slideshow-doc)
 9. [Self-Assessment Essays](#self-assessment-essays)
 10. [Professional Biographies](#professional-biographies)
 11. [Budget](#budget)
@@ -106,7 +110,7 @@ The following table outlines tasks required for the successful completion of loc
 | Develop a SAML 2FA system for user authentication                                                 | Maggie   |
 | Design database schema for posts, users, and locations                                            | Maggie   |
 | Develop post scheduler to map posts to database using ORM                                         | Maggie   |
-| Develop algorithm for recommending posts to users       z                                          | Kevin    |
+| Develop algorithm for recommending posts to users                                                 | Kevin    |
 | Develop and refine user interface based on UI mockups                                             | Maggie   |
 | Create content for application (wording, FAQ, notifications, etc.)                                | Kate     |
 | Integrate existing search tools to query for posts or users                                       | Kate     |
