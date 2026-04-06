@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image, Share } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Image, Share, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { theme } from '@/constants/theme'
 import { hp, wp } from '@/helpers/common'
@@ -12,6 +12,7 @@ import { supabase } from '../lib/supabase'
 import { createPostLike, removePostLike } from '../services/postService'
 import { Alert } from 'react-native'
 import { createNotification } from '@/services/notificationService'
+import { followUser, unfollowUser, checkIsFollowing } from '../services/followService'
 
 
 const PostCard = ({ 
@@ -25,11 +26,13 @@ const PostCard = ({
     onEdit=() => {}
  }) => {
     const [likes, setLikes] = useState([]);
+    const [isFollowing, setIsFollowing] = useState(false);
+    const [followLoading, setFollowLoading] = useState(false);
+
+    const isOwnPost = item?.profile?.id === currentUser?.id;
+
     const shadowStyles = {
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
+        shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.08,
         shadowRadius: 8,
         elevation: 3,
@@ -50,79 +53,97 @@ const PostCard = ({
     }
 
     useEffect(() => {
-        setLikes(item?.postLikes);
-    }, [])
+        setLikes(item?.postLikes ?? []);
+    }, []);
+
+    // Check follow status when card mounts (only for other users' posts)
+    useEffect(() => {
+        if (!isOwnPost && currentUser?.id && item?.profile?.id) {
+            checkIsFollowing(currentUser.id, item.profile.id).then(res => {
+                if (res.success) setIsFollowing(res.isFollowing);
+            });
+        }
+    }, [item?.profile?.id]);
 
     const createdAt = moment(item?.created_at).format('MMM D');
 
     const openPostDetails = () => {
-        if (!showMoreIcon) return; // if we're not showing the more icon, we shouldn't navigate to details on press
-    router.push({
-        pathname: '/(main)/postDetails', // FIXED: needs full path with folder prefix
-        params: { postId: item?.id }
-    });
-}
+        if (!showMoreIcon) return;
+        router.push({
+            pathname: '/(main)/postDetails',
+            params: { postId: item?.id }
+        });
+    }
 
     const hasImage = item?.image && item.image.includes('postImages');
     const hasVideo = item?.image && item.image.includes('postVideos');
-    const liked=likes.filter(like=> like.UserId ==currentUser.id)[0]? true : false;
-    console.log('Rendering PostCard for post: ', item);
+    const liked = likes.filter(like => like.UserId == currentUser.id)[0] ? true : false;
 
     const onLike = async () => {
-        console.log('Like button pressed for post: ', item.id, ' Current like status: ', liked);
-        if (liked){
-            let updatedLikes = likes.filter(like=> like.UserId!= currentUser.id);
+        if (liked) {
+            let updatedLikes = likes.filter(like => like.UserId != currentUser.id);
             setLikes(updatedLikes);
             let res = await removePostLike(item?.id, currentUser.id);
-            if (res.success){
-                console.log('Post unliked successfully: ', res.data); 
-            } else {
-                Alert.alert('Post', 'Something went wrong!')
+            if (!res.success) {
+                Alert.alert('Post', 'Something went wrong!');
             }
         } else {
-            let data = {
-                UserId: currentUser.id,
-                postId: item?.id
-            }
+            let data = { UserId: currentUser.id, postId: item?.id };
             setLikes([...likes, data]);
             let res = await createPostLike(data);
-            if (res.success){
-                if(currentUser.id !== item.profile?.id){ 
-                                let notificationData = {
-                                    senderID: currentUser.id,
-                                    receiverID: item.profile?.id,
-                                    title: "liked your post",
-                                    data: JSON.stringify({ postId: item.id, commentId: res.data.id }),
-                                }
-                                createNotification(notificationData);
-                            }
-                console.log('Post liked successfully: ', res.data); 
+            if (res.success) {
+                if (currentUser.id !== item.profile?.id) {
+                    createNotification({
+                        senderID: currentUser.id,
+                        receiverID: item.profile?.id,
+                        title: "liked your post",
+                        data: JSON.stringify({ postId: item.id, commentId: res.data.id }),
+                    });
+                }
             } else {
-                Alert.alert('Post', 'Something went wrong!')
+                Alert.alert('Post', 'Something went wrong!');
             }
         }
+    }
 
-        console.log('Like button pressed for post: ', item.id);
+    const onFollowPress = async () => {
+        if (followLoading) return;
+        setFollowLoading(true);
+
+        // Optimistic update
+        const wasFollowing = isFollowing;
+        setIsFollowing(!wasFollowing);
+
+        const res = wasFollowing
+            ? await unfollowUser(currentUser.id, item.profile.id)
+            : await followUser(currentUser.id, item.profile.id);
+
+        if (!res.success) {
+            // Revert on failure
+            setIsFollowing(wasFollowing);
+            Alert.alert('Error', res.msg || 'Something went wrong');
+        }
+
+        setFollowLoading(false);
     }
 
     const onShare = async () => {
-        let content = {message: item?.caption};
-        let strippedContent = content.message.replace(/<[^>]*>?/gm, ''); // remove html tags
+        let content = { message: item?.caption };
+        let strippedContent = content.message.replace(/<[^>]*>?/gm, '');
         content.message = strippedContent;
-        if (item?.image){
+        if (item?.image) {
             let url = await downloadFile(getSupabaseFileUrl(item.image)?.uri);
             content.url = url;
         }
         Share.share(content);
     }
 
-    const handlePostDelete = ()=>{
+    const handlePostDelete = () => {
         Alert.alert('Confirm Delete', 'Are you sure you want to delete this post?', [
-            {text: 'Cancel', style: 'cancel'},
-            {text: 'Delete', style: 'destructive', onPress: () => onDelete(item)}
-        ])
+            { text: 'Cancel', style: 'cancel' },
+            { text: 'Delete', style: 'destructive', onPress: () => onDelete(item) }
+        ]);
     }
-
 
     return (
         <View style={[styles.container, hasShadow && shadowStyles]}>
@@ -142,26 +163,52 @@ const PostCard = ({
                         <Text style={styles.postDate}>{createdAt}</Text>
                     </View>
                 </View>
-                {
-                    showMoreIcon && (
+
+                <View style={styles.headerRight}>
+                    {/* Follow button — only shown on other users' posts */}
+                    {!isOwnPost && !showDelete && (
+                        <TouchableOpacity
+                            onPress={onFollowPress}
+                            disabled={followLoading}
+                            style={[
+                                styles.followButton,
+                                isFollowing ? styles.followingButton : styles.notFollowingButton,
+                            ]}
+                            activeOpacity={0.75}
+                        >
+                            {followLoading ? (
+                                <ActivityIndicator
+                                    size={10}
+                                    color={isFollowing ? theme.colors.onSecondary : theme.colors.onPrimary}
+                                />
+                            ) : (
+                                <Text style={[
+                                    styles.followButtonText,
+                                    isFollowing ? styles.followingButtonText : styles.notFollowingButtonText,
+                                ]}>
+                                    {isFollowing ? 'Following' : 'Follow'}
+                                </Text>
+                            )}
+                        </TouchableOpacity>
+                    )}
+
+                    {showMoreIcon && (
                         <TouchableOpacity onPress={openPostDetails} style={styles.menuButton}>
                             <Icon name="threeDotsHorizontal" size={hp(2.8)} strokeWidth={3} color={theme.colors.onSecondary} />
                         </TouchableOpacity>
-                    )
-                }
-                {
-                    showDelete && item?.profile?.id === currentUser.id && (
+                    )}
+
+                    {showDelete && item?.profile?.id === currentUser.id && (
                         <View style={styles.actions}>
-                            <TouchableOpacity onPress={()=>onEdit(item)} style={styles.menuButton}>
+                            <TouchableOpacity onPress={() => onEdit(item)} style={styles.menuButton}>
                                 <Icon name="edit" size={hp(2.8)} strokeWidth={2} color={theme.colors.gray} />
                             </TouchableOpacity>
                             <TouchableOpacity onPress={handlePostDelete} style={styles.menuButton}>
                                 <Icon name="delete" size={hp(2.8)} strokeWidth={2} color={theme.colors.warning} />
                             </TouchableOpacity>
                         </View>
-                    )
-                }
-                
+                    )}
+                </View>
             </View>
 
             {/* Caption */}
@@ -193,21 +240,21 @@ const PostCard = ({
                     isLooping
                 />
             )}
-        <View style={styles.footer}>
-            <TouchableOpacity style={styles.footerButton} onPress={onLike} activeOpacity={1}>
-                <Icon name="heart" fill={liked ? theme.colors.onTertiary : 'none'} size={hp(2.2)} strokeWidth={2} color={liked? theme.colors.onTertiary: theme.colors.gray} />
-                <Text style={styles.count}>{likes?.length}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.footerButton} onPress={openPostDetails}>
-                <Icon name="comment" size={hp(2.2)} strokeWidth={2} color={theme.colors.gray} />
-                <Text style={styles.count}>{item.comments[0]?.count ?? 0}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.footerButton} onPress={onShare}>
-                <Icon name="share" size={hp(2.2)} strokeWidth={2} color={theme.colors.gray} />
-            </TouchableOpacity>
-        
 
-        </View>
+            <View style={styles.footer}>
+                <TouchableOpacity style={styles.footerButton} onPress={onLike} activeOpacity={1}>
+                    <Icon name="heart" fill={liked ? theme.colors.onTertiary : 'none'} size={hp(2.2)} strokeWidth={2} color={liked ? theme.colors.onTertiary : theme.colors.gray} />
+                    <Text style={styles.count}>{likes?.length}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.footerButton} onPress={openPostDetails}>
+                    <Icon name="comment" size={hp(2.2)} strokeWidth={2} color={theme.colors.gray} />
+                    <Text style={styles.count}>{item.comments[0]?.count ?? 0}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.footerButton} onPress={onShare}>
+                    <Icon name="share" size={hp(2.2)} strokeWidth={2} color={theme.colors.gray} />
+                </TouchableOpacity>
+            </View>
+
         </View>
     )
 }
@@ -232,6 +279,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+    },
+    headerRight: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
     },
     userInfo: {
         flexDirection: 'row',
@@ -280,5 +332,33 @@ const styles = StyleSheet.create({
     count: {
         color: theme.colors.onSecondary,
         fontSize: hp(1.8),
+    },
+    // Follow button styles
+    followButton: {
+        paddingHorizontal: 6,
+        paddingVertical: 5,
+        borderRadius: 20,
+        borderWidth: 1,
+        minWidth: 60,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    notFollowingButton: {
+        backgroundColor: theme.colors.primary,
+        borderColor: theme.colors.primary,
+    },
+    followingButton: {
+        backgroundColor: 'transparent',
+        borderColor: theme.colors.secondary,
+    },
+    followButtonText: {
+        fontSize: hp(1.5),
+        fontWeight: theme.fonts.semibold,
+    },
+    notFollowingButtonText: {
+        color: theme.colors.onPrimary,
+    },
+    followingButtonText: {
+        color: theme.colors.onSecondary,
     },
 })

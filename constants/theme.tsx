@@ -15,7 +15,6 @@ export const theme = {
         surface: "#f5effd",
         warning: "#ff0000",
         gray: "#9788a2",
-
     },
     radius: {
         sm: 4,

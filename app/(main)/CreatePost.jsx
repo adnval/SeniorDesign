@@ -1,19 +1,16 @@
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Pressable, Image, ActivityIndicator } from 'react-native'
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Pressable, Image, ActivityIndicator, TextInput } from 'react-native'
 import React, {useRef, useState, useEffect} from 'react'
 import LogoHeader from '@/components/LogoHeader'
 import { theme } from "@/constants/theme";
 import { wp, hp } from '@/helpers/common';
 import Avatar from '@/components/Avatar';
 import { useAuth } from '@/contexts/AuthContext';
-import RichTextEditor from '@/components/RichTextEditor';
 import {useRouter} from 'expo-router'
 import Icon from "@/assets/icons";
-import { Button, ButtonText } from "@/components/ui/button";
 import * as ImagePicker from 'expo-image-picker'
 import getSupabaseFileUrl from '@/services/imageService'
 import  {Video} from 'expo-av'
 import { createOrUpdatePost } from '@/services/postService';
-import { getUserImageSrc } from '@/services/imageService';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import HomeBar from '@/components/HomeBar';
 import ScreenWrapper from '@/components/ScreenWrapper';
@@ -24,9 +21,8 @@ const CreatePost = () => {
     const { uri } = useLocalSearchParams();
     const {user, userData} = useAuth();
     const profile = userData?.data ?? userData ?? {};
-    const bodyRef = useRef("");
-    const editorRef = useRef("");
     const router = useRouter();
+    const [caption, setCaption] = useState('');
     const [loading, setLoading] = useState(false);
     const [location, setLocation] = useState(null);
     const [locationName, setLocationName] = useState(null);
@@ -48,12 +44,10 @@ const CreatePost = () => {
         setLocation(coords);
 
         try {
-            console.log('Reverse geocoding for coords:', coords);
             let geo = await Location.reverseGeocodeAsync(coords);
             if (geo?.[0]) {
                 const { city, region } = geo[0];
                 setLocationName([city, region].filter(Boolean).join(', '));
-                console.log('Location name set to:', [city, region].filter(Boolean).join(', '));
             }
         } catch (e) {
             console.log('Reverse geocode error:', e);
@@ -81,15 +75,14 @@ const CreatePost = () => {
 
     const onSubmit = async () => {
         if (loading) return;
-        console.log('Submitting post with body: ', bodyRef.current, ' and file: ', file);
-        if (!bodyRef.current && !file) {
-            alert('Please add a caption and media to your post before submitting.');
+        if (!caption && !file) {
+            alert('Please add a caption or media to your post before submitting.');
             return;
         }
 
         let data = {
             file: file,
-            caption: bodyRef.current,
+            caption: caption,
             userId: user?.id,
             location: location ? `POINT(${location.longitude} ${location.latitude})` : 'POINT(-74.0060 40.7128)',
         }
@@ -97,7 +90,6 @@ const CreatePost = () => {
         setLoading(true);
         let response = await createOrUpdatePost(data);
         setLoading(false);
-        console.log('Create post response: ', response);
         if (response.success) {
             alert('Post created successfully!');
             router.replace('/feed');
@@ -132,6 +124,7 @@ const CreatePost = () => {
                 <ScrollView
                     contentContainerStyle={styles.scrollContent}
                     showsVerticalScrollIndicator={false}
+                    keyboardShouldPersistTaps="handled"
                 >
                     <View style={styles.header}>
                         <Avatar
@@ -150,9 +143,16 @@ const CreatePost = () => {
                         </View>
                     </View>
 
-                    <View style={styles.textEditor}>
-                        <RichTextEditor editorRef={editorRef} onChange={body => bodyRef.current = body} />
-                    </View>
+                    <TextInput
+                        style={styles.captionInput}
+                        placeholder="What's on your mind?"
+                        placeholderTextColor={theme.colors.gray}
+                        multiline
+                        value={caption}
+                        onChangeText={setCaption}
+                        textAlignVertical="top"
+                        blurOnSubmit={false}
+                    />
 
                     {locationName && (
                         <View style={styles.locationCard}>
@@ -253,8 +253,12 @@ const styles = StyleSheet.create({
         fontWeight: theme.fonts.medium,
         color: theme.colors.secondary,
     },
-    textEditor: {
+    captionInput: {
         minHeight: hp(15),
+        fontSize: hp(1.9),
+        color: theme.colors.onSecondary,
+        paddingHorizontal: 2,
+        paddingTop: 0,
     },
     file: {
         height: hp(28),

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, ScrollView, FlatList, ActivityIndicator } from "react-native";
+import { StyleSheet, View, ScrollView, ActivityIndicator, TouchableOpacity, Text as RNText, Alert } from "react-native";
 import { useAuth } from "@/contexts/AuthContext";
 import { Text } from "@/components/ui/text";
 import { Card } from "@/components/ui/card";
@@ -15,23 +15,32 @@ import { getUserData } from "@/services/userService";
 import { fetchPosts } from "@/services/postService";
 import PostCard from "@/components/PostCard";
 import BackButton from "@/components/BackButton";
+import { followUser, unfollowUser, checkIsFollowing } from "@/services/followService";
 
 const UserProfile = () => {
     const { userId } = useLocalSearchParams();
-    const { userData } = useAuth();
+    const { user, userData } = useAuth();
     const currentUser = userData?.data ?? userData ?? {};
     const router = useRouter();
     const [profile, setProfile] = useState(null);
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [isFollowing, setIsFollowing] = useState(false);
+    const [followLoading, setFollowLoading] = useState(false);
+
+    const isOwnProfile = user?.id === userId;
 
     useEffect(() => {
-        console.log("UserProfile mounted with userId:", userId);
         if (userId) {
             loadProfile();
             loadPosts();
+            if (!isOwnProfile) {
+                checkIsFollowing(user.id, userId).then(res => {
+                    if (res.success) setIsFollowing(res.isFollowing);
+                });
+            }
         }
-    }, [userId])
+    }, [userId]);
 
     const loadProfile = async () => {
         let res = await getUserData(userId);
@@ -50,6 +59,25 @@ const UserProfile = () => {
             setPosts(userPosts);
         }
     }
+
+    const onFollowPress = async () => {
+        if (followLoading) return;
+        setFollowLoading(true);
+
+        const wasFollowing = isFollowing;
+        setIsFollowing(!wasFollowing);
+
+        const res = wasFollowing
+            ? await unfollowUser(user.id, userId)
+            : await followUser(user.id, userId);
+
+        if (!res.success) {
+            setIsFollowing(wasFollowing);
+            Alert.alert('Error', res.msg || 'Something went wrong');
+        }
+
+        setFollowLoading(false);
+    };
 
     if (loading) {
         return (
@@ -87,6 +115,33 @@ const UserProfile = () => {
                         {profile?.username && (
                             <Text style={styles.username}>@{profile.username}</Text>
                         )}
+
+                        {/* Follow button — hidden on own profile */}
+                        {!isOwnProfile && (
+                            <TouchableOpacity
+                                onPress={onFollowPress}
+                                disabled={followLoading}
+                                activeOpacity={0.75}
+                                style={[
+                                    styles.followButton,
+                                    isFollowing ? styles.followingButton : styles.notFollowingButton,
+                                ]}
+                            >
+                                {followLoading ? (
+                                    <ActivityIndicator
+                                        size="small"
+                                        color={isFollowing ? theme.colors.onSecondary : theme.colors.onPrimary}
+                                    />
+                                ) : (
+                                    <RNText style={[
+                                        styles.followButtonText,
+                                        isFollowing ? styles.followingButtonText : styles.notFollowingButtonText,
+                                    ]}>
+                                        {isFollowing ? 'Following' : 'Follow'}
+                                    </RNText>
+                                )}
+                            </TouchableOpacity>
+                        )}
                     </Card>
 
                     {/* Bio */}
@@ -118,9 +173,7 @@ const UserProfile = () => {
                     </Card>
 
                     {/* Their Posts */}
-                    <Text size="lg" bold style={styles.postsTitle}>
-                        Posts
-                    </Text>
+                    <Text size="lg" bold style={styles.postsTitle}>Posts</Text>
                     {posts.length === 0 ? (
                         <Text style={styles.noPosts}>No posts yet</Text>
                     ) : (
@@ -174,6 +227,34 @@ const styles = StyleSheet.create({
     username: {
         textAlign: "center",
         color: theme.colors.gray,
+    },
+    followButton: {
+        marginTop: 4,
+        paddingHorizontal: 32,
+        paddingVertical: 8,
+        borderRadius: 20,
+        borderWidth: 1,
+        minWidth: 120,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    notFollowingButton: {
+        backgroundColor: theme.colors.primary,
+        borderColor: theme.colors.primary,
+    },
+    followingButton: {
+        backgroundColor: 'transparent',
+        borderColor: theme.colors.secondary,
+    },
+    followButtonText: {
+        fontSize: hp(1.7),
+        fontWeight: '600',
+    },
+    notFollowingButtonText: {
+        color: theme.colors.onPrimary,
+    },
+    followingButtonText: {
+        color: theme.colors.onSecondary,
     },
     sectionCard: {
         padding: 16,
