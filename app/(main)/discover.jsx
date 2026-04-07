@@ -11,6 +11,8 @@ import HomeBar from '../../components/HomeBar'
 import LogoHeader from '../../components/LogoHeader'
 import { useRouter } from 'expo-router'
 import Avatar from '../../components/Avatar'
+import { useAuth } from '@/contexts/AuthContext'
+import { updateLocalsPoints } from '@/services/userService'
 
 const DEFAULT_LOCATION = { latitude: 40.7128, longitude: -74.0060 } // NYC fallback
 
@@ -23,6 +25,8 @@ const MapScreen = () => {
     const [selectedPost, setSelectedPost] = useState(null)
     const [locationEnabled, setLocationEnabled] = useState(null) // null = unknown, true = granted, false = denied
     const [showLocationPrompt, setShowLocationPrompt] = useState(false)
+    const { user } = useAuth()
+    const [visited, setVisited] = useState({})
 
     useEffect(() => {
         init()
@@ -193,11 +197,7 @@ const MapScreen = () => {
 
                 {/* Selected post preview card */}
                 {selectedPost && (
-                    <TouchableOpacity
-                        style={styles.previewCard}
-                        onPress={() => openPost(selectedPost)}
-                        activeOpacity={0.9}
-                    >
+                    <View style={styles.previewCard}>
                         <View style={styles.previewLeft}>
                             <Avatar
                                 uri={selectedPost.profile?.image}
@@ -211,14 +211,41 @@ const MapScreen = () => {
                                 </Text>
                             </View>
                         </View>
-                        {selectedPost.image?.includes('postImages') && (
-                            <Image
-                                source={getSupabaseFileUrl(selectedPost.image)}
-                                style={styles.previewImage}
-                            />
-                        )}
-                    </TouchableOpacity>
+
+                        <View style={styles.previewRight}>
+                            {selectedPost.image?.includes('postImages') && (
+                                <Image
+                                    source={getSupabaseFileUrl(selectedPost.image)}
+                                    style={styles.previewImage}
+                                />
+                            )}
+                            <View style={styles.visitButtons}>
+                                <TouchableOpacity
+                                    style={[styles.visitBtn, visited[selectedPost.id] && styles.visitedBtn]}
+                                    onPress={async () => {
+                                        if (!visited[selectedPost.id]) {
+                                            setVisited(prev => ({ ...prev, [selectedPost.id]: true }))
+                                            await updateLocalsPoints(user.id, 1)
+                                        }
+                                    }}
+                                >
+                                    <Text style={[styles.visitBtnText, visited[selectedPost.id] && styles.visitedBtnText]}>
+                                        {visited[selectedPost.id] ? 'Visited ✓' : 'Visited'}
+                                    </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={[styles.visitBtn, !visited[selectedPost.id] && styles.unvisitedActiveBtn]}
+                                    onPress={() => setVisited(prev => ({ ...prev, [selectedPost.id]: false }))}
+                                >
+                                    <Text style={[styles.visitBtnText, !visited[selectedPost.id] && styles.unvisitedActiveBtnText]}>
+                                        Unvisited
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
                 )}
+                
 
                 {/* Location Permission Prompt Modal */}
                 <Modal

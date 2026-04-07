@@ -13,12 +13,14 @@ import { theme } from "@/constants/theme";
 import Icon from 'assets/icons';
 import { getFollowCounts } from "@/services/followService";
 import { hp } from "@/helpers/common";
+import { updateLocalsPoints } from '@/services/userService'
 
 const Profile = () => {
   const { user, userData, signOutUser } = useAuth();
   const router = useRouter();
   const [followerCount, setFollowerCount] = useState(0);
   const [followingCount, setFollowingCount] = useState(0);
+  const [localsPoints, setLocalsPoints] = useState(0)
 
   useEffect(() => {
     if (user?.id) {
@@ -28,6 +30,9 @@ const Profile = () => {
           setFollowingCount(res.followingCount);
         }
       });
+      getUserData(user.id).then(res => {
+            if (res.success) setLocalsPoints(res.data.locals_points ?? 0)
+        })
     }
   }, [user?.id]);
 

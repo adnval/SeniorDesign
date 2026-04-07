@@ -106,4 +106,38 @@ secondaryText: {
       alignItems: 'center',
       width: '100%',
     },
+    previewRight: {
+    alignItems: 'flex-end',
+    gap: 6,
+    },
+    visitButtons: {
+        flexDirection: 'row',
+        gap: 6,
+    },
+    visitBtn: {
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+        borderRadius: theme.radius.lg,
+        borderWidth: 1,
+        borderColor: theme.colors.gray,
+    },
+    visitBtnText: {
+        fontSize: hp(1.5),
+        color: theme.colors.gray,
+        fontWeight: '500',
+    },
+    visitedBtn: {
+        backgroundColor: theme.colors.primary,
+        borderColor: theme.colors.primary,
+    },
+    visitedBtnText: {
+        color: 'white',
+    },
+    unvisitedActiveBtn: {
+        backgroundColor: theme.colors.onSecondary,
+        borderColor: theme.colors.onSecondary,
+    },
+    unvisitedActiveBtnText: {
+        color: 'white',
+    },
 });

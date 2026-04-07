@@ -10,6 +10,7 @@ export const createOrUpdatePost = async (post) => {
             let fileResult = await uploadFile(folderName, post.file.uri, isImage);
             console.log('File upload result: ', fileResult);
             if (fileResult.success) {
+                await updateLocalsPoints(user.id, 5)
                 post.image = fileResult.data; // CHANGED: was "post.file = fileResult.data", now maps to the correct "image" column in the posts table
             } else {
                 return fileResult;
