@@ -112,8 +112,8 @@ The following table outlines tasks required for the successful completion of loc
 | Integrate existing search tools to query for posts or users                                       | Kate     |
 | Research 3D engine for AR image viewing in map feed                                               | Kevin    |
 | Write base queries/mutations to fetch user/post data from database using database schema          | Maggie   |
-| Recruit beta testers                                                                               | Kate     |
-| Populate database with test users and posts                                                        | Maggie   |
+| Recruit beta testers                                                                              | Kate     |
+| Populate database with test users and posts                                                       | Maggie   |
 | **Total Tasks**                                                                                   | **18**   |
 
 
@@ -201,9 +201,9 @@ security practices to protect people’s information effectively.
 ## PPT Slideshow [[doc]](Assignment08_DesignPresentation/Locale_DesignPresentation.pptx)
 
 ## Self-Assessment Essays
-- [Kevin Chu](Assignment03_TeamContract_And_IndividualCapstoneAssessment/ChuKevin_IndividualCapstoneAssessment.md)
-- [Maggie Lyon](Assignment03_TeamContract_And_IndividualCapstoneAssessment/LyonMaggie_IndividualCapstoneAssessment.md)
-- [Kate Schmidlin](Assignment03_TeamContract_And_IndividualCapstoneAssessment/SchmidlinKate_IndividualCapstoneAssessment.md)
+- [Kevin Chu](Assignment03_TeamContract_IndividualCapstoneAssessment/ChuKevin_IndividualCapstoneAssessment.md)
+- [Maggie Lyon](Assignment03_TeamContract_IndividualCapstoneAssessment/LyonMaggie_IndividualCapstoneAssessment.md)
+- [Kate Schmidlin](Assignment03_TeamContract_IndividualCapstoneAssessment/SchmidlinKate_IndividualCapstoneAssessment.md)
 
 ## Professional Biographies
 - [Kevin Chu](Assignment01_ProfessionalBiography/ChuKevin_ProfessionalBiography.md)
