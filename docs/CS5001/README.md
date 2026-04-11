@@ -15,7 +15,7 @@ This directory contains extensive documentation outlining our team's work on the
     2. [Timeline](#timeline-doc)
     3. [Effort Matrix](#effort-matrix-doc)
 5. [ABET Concerns](#abet-concerns-doc)
-6. [PPT Slideshow](#ppt-slideshow-doc)
+6. [PPT Slideshow](#ppt-slideshow)
 7. [Self-Assessment Essays](#self-assessment-essays)
 8. [Professional Biographies](#professional-biographies)
 9. [Budget](#budget)
@@ -198,7 +198,8 @@ will need to be a primary focus of our application if we want to launch more
 expansive testing/implementation of the media. We will need to research modern 
 security practices to protect people’s information effectively.
 
-## PPT Slideshow [[doc]](Assignment08_DesignPresentation/Locale_DesignPresentation.pptx)
+## PPT Slideshow
+- [Locale Mid-Semester Design Presentation](Assignment08_DesignPresentation/Locale_DesignPresentation.pptx)
 
 ## Self-Assessment Essays
 - [Kevin Chu](Assignment03_TeamContract_IndividualCapstoneAssessment/ChuKevin_IndividualCapstoneAssessment.md)
