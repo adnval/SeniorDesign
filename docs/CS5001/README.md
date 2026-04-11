@@ -199,7 +199,7 @@ expansive testing/implementation of the media. We will need to research modern
 security practices to protect people’s information effectively.
 
 ## PPT Slideshow
-- [Locale Mid-Semester Design Presentation](Assignment08_DesignPresentation/Locale_MidDesignPresentation.pptx)
+- [Mid-Semester Design Presentation](Assignment08_DesignPresentation/Locale_MidDesignPresentation.pptx)
 
 ## Self-Assessment Essays
 - [Kevin Chu](Assignment03_TeamContract_IndividualCapstoneAssessment/ChuKevin_IndividualCapstoneAssessment.md)
