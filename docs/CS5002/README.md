@@ -15,7 +15,7 @@ This directory contains extensive documentation outlining our team's work on the
 7. [Assessments](#assessments)
     1. [Mid-Semester Individual Assessments](#mid-semester-individual-assessments)
     2. [Final-Semester Individual Assessments](#final-semester-individual-assessments)
-8. [Summary of Hours & Justification](summary-of-hours--justification)
+8. [Summary of Hours & Justification](#summary-of-hours--justification)
 9. [Summary of Expenses](#summary-of-expenses)
 10. [Appendix](#appendix)
 
@@ -50,7 +50,7 @@ WIP
 WIP
 
 ## Final Design Presentation
-- [Final-Semester Design Presentation](Assignment03_PresentationSlideDeck/Locale_FinalDesignPresentation.pptx)
+- [Final-Semester Design Presentation](https://mailuc-my.sharepoint.com/:p:/g/personal/lyonme_mail_uc_edu/IQCSDKL6nBUBSqwI1cz6wPzjAZPoA5UI1HqX76nMZ9OiyTs?e=mhIy4M)
 
 ## Expo Poster
 ![Expo Poster](Assignment05_ExpoPoster/Locale_ExpoPoster.png)
@@ -63,9 +63,9 @@ WIP
 - [Kate Schmidlin](../CS5001/Assignment03_TeamContract_IndividualCapstoneAssessment/SchmidlinKate_IndividualCapstoneAssessment.md)
 
 ### Final-Semester Individual Assessments
-- [Kevin Chu]()
-- [Maggie Lyon]()
-- [Kate Schmidlin]()
+- [Kevin Chu](Assignment06_SelfAssessments/ChuKevin_SelfAssessment.md))
+- [Maggie Lyon](Assignment06_SelfAssessments/LyonMaggie_SelfAssessment.md)
+- [Kate Schmidlin](Assignment06_SelfAssessments/SchmidlinKate_SelfAssessment.md)
 
 ## Summary of Hours & Justification
 WIP
