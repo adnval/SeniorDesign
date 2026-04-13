@@ -433,7 +433,9 @@ FS3.10 Results: System remained responsive with minimal latency under simulated 
 WIP
 
 ### FAQ
-WIP
+1. **Why are the images not placed based off location data pulled from the image?** - A lot of thought went into how we wanted the image placement to function. Ultimately we decided it would be most user friendly for the location be recorded where the user is when they post. We decided this based on our own experience using the application, where you may want to get a picture of the full mural by going across the street, or on a balcony, but if the location was pulled from the image's meta data in those instances, it would not be accurately placed on the map.
+2. **What about the addition of a recommended route?** - At the Expo Presentation a few people brought this idea to our attention and we love it! The implmenetation being that if you were walking to a location, we could give you a route optimized to see the most art on your path. We are currently prioritizing our leaderboard update, but will be giving this idea attention when the leaderboard addition is complete!
+3. **What are you guildlines for content moderation?** - Many people asked this at the Expo, and understandably so, as art has always been difficult to tactfully moderate. Our current guideline is, "If it is allowed in a museum open to all ages, it is allowed on Local!".
 
 ## Final Design Presentation
 - [Final-Semester Design Presentation](https://mailuc-my.sharepoint.com/:p:/g/personal/lyonme_mail_uc_edu/IQCSDKL6nBUBSqwI1cz6wPzjAZPoA5UI1HqX76nMZ9OiyTs?e=mhIy4M)
