@@ -4,20 +4,26 @@ This directory contains extensive documentation outlining our team's work on the
 ## Table of Contents
 1. [Team Locale](#team-locale)
 2. [Project Description](#project-description)
-3. [Test Plans & Results](#test-plans--results-doc)
+3. [User Interface Specifications](#user-interface-specifications)
+    1. [Feed Page](#feed-page)
+    2. [Map Page](#map-page)
+    3. [Camera Page](#camera-page)
+    4. [Notifications Page](#notifications-page)
+    5. [Profile Page](#profile-page)
+4. [Test Plans & Results](#test-plans--results-doc)
     1. [Test Plans](#test-plans)
     2. [Test Case Matrix](#test-case-matrix)
-4. [User Manual & FAQ](#user-manual--faq)
+5. [User Manual & FAQ](#user-manual--faq)
     1. [User Manual](#user-manual)
     2. [FAQ](#faq)
-5. [Final Design Presentation](#final-design-presentation)
-6. [Expo Poster](#expo-poster)
-7. [Assessments](#assessments)
+6. [Final Design Presentation](#final-design-presentation)
+7. [Expo Poster](#expo-poster)
+8. [Assessments](#assessments)
     1. [Mid-Semester Individual Assessments](#mid-semester-individual-assessments)
     2. [Final-Semester Individual Assessments](#final-semester-individual-assessments)
-8. [Summary of Hours & Justification](#summary-of-hours--justification)
-9. [Summary of Expenses](#summary-of-expenses)
-10. [Appendix](#appendix)
+9. [Summary of Hours & Justification](#summary-of-hours--justification)
+10. [Summary of Expenses](#summary-of-expenses)
+11. [Appendix](#appendix)
 
 ## Team "Locale"
 | Team Member | Major | Email |
@@ -32,6 +38,102 @@ This directory contains extensive documentation outlining our team's work on the
 
 ## Project Description
 Locale is a location-based social media platform where users post media tied to specific places. By encouraging nearby users to visit and engage with content in person, it fosters real-world interaction. The app supports creative uses such as virtual art galleries, connecting communities through shared, location-driven experiences.
+
+## User Interface Specifications
+Locale focuses on enabling users to discover and share local content through a combination of a feed and an interactive map. The UI is designed to be intuitive, mobile-first, and centered around quick content creation and exploration.
+
+The application consists of five primary screens: Feed, Map, Create Post, Notifications, and Profile. Navigation between these screens is handled through a persistent bottom navigation bar.
+
+### Feed Page
+Purpose: Display posts near the user’s current location
+
+Components:
+- Scrollable list of posts
+- Each post includes:
+- Image
+- Username
+- Timestamp
+- Like/Dislike buttons
+- Like/Dislike counts
+- Refresh control (pull-to-refresh)
+
+Interactions:
+- Tap post → View full post
+- Tap like/dislike → Update engagement
+- Scroll → Load more posts
+
+Expected Behavior:
+- Posts sorted by proximity or recency
+- Only nearby posts are shown
+
+### Map Page
+Purpose: Visualize posts geographically
+
+Components:
+- Interactive map view
+- Pins representing posts
+- Optional clustering of nearby pins
+
+Interactions:
+- Tap pin → Preview post
+- Tap preview → Open full post
+- Zoom/pan → Update visible posts
+
+Expected Behavior:
+- Pins accurately reflect GPS coordinates
+- Map updates dynamically based on viewport
+
+### Camera Page
+Purpose: Allow users to create and upload posts
+
+Components:
+- Camera interface
+- Capture button
+- Upload/confirm button
+- Optional caption input
+
+Interactions:
+- Take photo → Preview → Submit
+- Cancel → Return to previous screen
+
+Expected Behavior:
+- Automatically attaches user’s location
+- Prevents upload if required data missing
+
+### Notifications Page
+Purpose: Display user activity updates
+
+Components:
+- List of notifications
+- Notification types:
+- Likes
+- Dislikes
+- Follows (if implemented)
+
+Interactions:
+- Tap notification → Navigate to relevant content
+
+Expected Behavior:
+- Notifications displayed in chronological order
+- Real-time or near real-time updates
+
+### Profile Page
+Purpose: Display and edit user information
+
+Components:
+- Profile picture
+- Username
+- Bio
+- User’s posts grid/list
+- Edit profile button
+
+Interactions:
+- Tap edit → Modify profile info
+- Tap post → View post
+
+Expected Behavior:
+- Changes persist immediately
+- Only user can edit their own profile
 
 ## Test Plans & Results [[doc]](Assignment01_TestPlan/Locale_TestPlan.pdf)
 
