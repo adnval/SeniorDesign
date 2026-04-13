@@ -430,7 +430,13 @@ FS3.10 Results: System remained responsive with minimal latency under simulated 
 ## User Manual & FAQ
 
 ### User Manual
-WIP
+In order to create an account on Local you must have an email you can varify your account through.   
+Once email authentication is complete, log-in or sign-in as you would with any standard application.  
+View our map tool (characterized by the pin icon) and click the camera button to take a photo or upload a photo on the map.  
+After taking or selecting a photo to upload, you can then add a caption or simply click post. NOTE: Your post will be shown on the map at the location you click "POST" at.  
+You may click on any of the posted locations on the map to see more details about the post itself.  
+You can scroll through other most-recent posts in a different view, without the map, via the feed/explore page. This is also an easy way to like / comment / and follow other users. 
+You can view and edit your profile via the profile page.  
 
 ### FAQ
 1. **Why are the images not placed based off location data pulled from the image?** - A lot of thought went into how we wanted the image placement to function. Ultimately we decided it would be most user friendly for the location be recorded where the user is when they post. We decided this based on our own experience using the application, where you may want to get a picture of the full mural by going across the street, or on a balcony, but if the location was pulled from the image's meta data in those instances, it would not be accurately placed on the map.
