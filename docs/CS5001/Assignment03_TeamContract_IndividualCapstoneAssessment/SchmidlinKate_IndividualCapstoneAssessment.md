@@ -1,3 +1,5 @@
+# Individual Capstone Assessment - Kate Schmidlin  
+
 &emsp; &ensp; Our Senior Design project is a social media platform that allows people to share art that they 
 discover, or visit/view art that others have discovered, using the assistance and amplified by the 
 experience of AR technology. A user should be able to be directed through taking a series of 
