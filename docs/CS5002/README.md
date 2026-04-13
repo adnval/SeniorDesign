@@ -6,7 +6,7 @@ This directory contains extensive documentation outlining our team's work on the
 2. [Project Description](#project-description)
 3. [Test Plans & Results](#test-plans--results-doc)
     1. [Test Plans](#test-plans)
-    2. [Results Matrix](#results-matrix)
+    2. [Test Case Matrix](#test-case-matrix)
 4. [User Manual & FAQ](#user-manual--faq)
     1. [User Manual](#user-manual)
     2. [FAQ](#faq)
@@ -322,7 +322,7 @@ FS3.9 Level: Integration
 
 FS3.10 Results: System remained responsive with minimal latency under simulated load.
 
-### Results Matrix
+### Test Case Matrix
 ![Test Case Matrix](Assignment01_TestPlan/Locale_TestCaseMatrix.png)
 
 ## User Manual & FAQ
