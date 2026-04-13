@@ -63,7 +63,7 @@ WIP
 - [Kate Schmidlin](../CS5001/Assignment03_TeamContract_IndividualCapstoneAssessment/SchmidlinKate_IndividualCapstoneAssessment.md)
 
 ### Final-Semester Individual Assessments
-- [Kevin Chu](Assignment06_SelfAssessments/ChuKevin_SelfAssessment.md))
+- [Kevin Chu](Assignment06_SelfAssessments/ChuKevin_SelfAssessment.md)
 - [Maggie Lyon](Assignment06_SelfAssessments/LyonMaggie_SelfAssessment.md)
 - [Kate Schmidlin](Assignment06_SelfAssessments/SchmidlinKate_SelfAssessment.md)
 
